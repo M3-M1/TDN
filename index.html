@@ -1,35 +1,310 @@
-<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Travessia do Nilo</title><style>
-:root{--az:#0a4f74;--az2:#062b43;--ouro:#e2b548;--pap:#e7c982;--t:#25190e}*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:Georgia,serif;background:linear-gradient(#071d2c,#0b567d);color:#fff}button{font:inherit}
-#intro{position:fixed;inset:0;z-index:50;display:grid;place-items:center;overflow:hidden;background:radial-gradient(circle at 50% 50%,#9c7737 0 3%,transparent 30%),linear-gradient(#091a26,#06111a);transition:opacity 1s,visibility 1s}.mist{position:absolute;inset:-20%;background:radial-gradient(ellipse at 25% 45%,#ffffff1c,transparent 28%),radial-gradient(ellipse at 75% 55%,#ffffff16,transparent 26%),radial-gradient(ellipse at 52% 78%,#e9cd9320,transparent 24%);filter:blur(22px);animation:mist 15s linear infinite alternate}@keyframes mist{from{transform:translate3d(-3%,0,0) scale(1)}to{transform:translate3d(5%,2%,0) scale(1.09)}}#intro.closed{opacity:0;visibility:hidden;pointer-events:none}
-.stage{position:absolute;inset:0;z-index:3;pointer-events:none}.fanwrap{position:absolute;bottom:-16vh;width:min(43vw,740px);height:min(92vh,980px);transition:transform 1.9s cubic-bezier(.22,.76,.2,1),opacity 1.1s;filter:drop-shadow(0 24px 26px #0006);animation:fanFloat 4.8s ease-in-out infinite alternate}.fanwrap.l{left:-6vw}.fanwrap.r{right:-6vw;animation-delay:.6s}@keyframes fanFloat{to{transform:translateY(-2.4vh)}}.fan{position:absolute;inset:0;background:radial-gradient(circle at 56% 54%,#fff8de55,transparent 17%),repeating-conic-gradient(from 112deg at 84% 78%,#8d5e1f 0 8deg,#dcb662 8deg 14deg,#19526e 14deg 18deg,#6f3620 18deg 23deg,#dcb662 23deg 28deg);clip-path:polygon(0 8%,100% 49%,0 94%);border-radius:38px;overflow:hidden}.fan:before{content:"";position:absolute;inset:0;background:linear-gradient(#ffffff38,transparent 26%),repeating-linear-gradient(0deg,#ffffff20 0 1px,transparent 1px 18px),radial-gradient(circle at 78% 48%,#ffebb055,transparent 24%);mix-blend-mode:screen}.fanwrap.r .fan{transform:scaleX(-1)}.handle{position:absolute;bottom:2.5vh;width:14px;height:34vh;background:linear-gradient(#6d4319,#3d2714 58%,#25150a);border-radius:20px}.fanwrap.l .handle{left:11%;transform:rotate(-11deg)}.fanwrap.r .handle{right:11%;transform:rotate(11deg)}
-.branch{position:absolute;bottom:-9vh;width:14vw;min-width:110px;max-width:190px;height:72vh;opacity:.88;filter:drop-shadow(0 12px 12px #0004);transition:transform 1.8s cubic-bezier(.22,.76,.2,1),opacity 1.1s;animation:branchFloat 4.3s ease-in-out infinite alternate}.branch.l{left:6vw}.branch.r{right:6vw;transform:scaleX(-1);animation-delay:.45s}@keyframes branchFloat{to{transform:translateY(-1.8vh)}}.stem{position:absolute;left:50%;bottom:0;width:10px;height:100%;transform:translateX(-50%);background:linear-gradient(#80511e,#4d3218 52%,#2a1b0f);border-radius:999px}.leaf{position:absolute;left:50%;width:46%;height:10%;background:linear-gradient(90deg,#63894df2,#486d36fa 56%,#2a461df5);clip-path:polygon(0 52%,16% 22%,58% 0,100% 44%,60% 100%,18% 78%);transform-origin:left center}.leaf:after{content:"";position:absolute;inset:44% 8% 44% 12%;background:#d6f2ba2d;border-radius:999px}
-#intro.opening .fanwrap.l{transform:translate(-118%,-17vh) rotate(-12deg);opacity:0}#intro.opening .fanwrap.r{transform:translate(118%,-17vh) rotate(12deg);opacity:0}#intro.opening .branch.l{transform:translate(-46%,-22vh) rotate(-9deg);opacity:0}#intro.opening .branch.r{transform:scaleX(-1) translate(-46%,-22vh) rotate(-9deg);opacity:0}
-.sand,.sand:before,.sand:after{position:absolute;inset:-28%;content:"";z-index:8;opacity:0;pointer-events:none;background:radial-gradient(ellipse at 35% 44%,#f4d394e0,transparent 22%),radial-gradient(ellipse at 58% 54%,#e0b76cd1,transparent 24%),radial-gradient(ellipse at 75% 48%,#c38d4bc2,transparent 20%),repeating-linear-gradient(11deg,transparent 0 12px,#efcc892b 12px 16px);filter:blur(8px);transform:translateX(-25%) scale(1.02)}.sand:before{filter:blur(18px)}.sand:after{filter:blur(30px)}#intro.opening .sand,#intro.opening .sand:before,#intro.opening .sand:after{animation:sand 1.9s cubic-bezier(.2,.76,.18,1) forwards}@keyframes sand{0%{opacity:0;transform:translateX(-36%) scale(.92)}18%{opacity:.45}48%{opacity:.98}78%{opacity:.72}100%{opacity:0;transform:translateX(30%) scale(1.10)}}
-.intro{z-index:4;text-align:center;padding:25px}.eye{font-size:50px;color:#f4d77f}.intro h1{font-size:clamp(42px,8vw,92px);margin:0;color:#f3d887;letter-spacing:.07em;text-shadow:0 4px #6f4b16,0 12px 26px #0008}.intro p{letter-spacing:.28em;text-transform:uppercase;color:#ead9a8}.enter{border:1px solid #d6a93b;background:linear-gradient(#f4d77f,#c7922f);color:#24170b;border-radius:999px;padding:13px 28px;font-weight:700;cursor:pointer}
-#app{opacity:0;transition:.8s}#app.ready{opacity:1}.top{position:sticky;top:0;z-index:20;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:13px 4vw;background:#041825e8;border-bottom:1px solid #d8a93566;backdrop-filter:blur(10px)}.brand{color:#f0cf72;font-weight:700;letter-spacing:.08em}.chips{display:flex;gap:7px;flex-wrap:wrap}.chip{border:1px solid #f0cf7255;background:#ffffff10;color:#fff;border-radius:999px;padding:8px 12px;cursor:pointer}
-.hero,.main{max-width:1200px;margin:auto;padding:30px 4vw 10px}.hero{display:grid;grid-template-columns:1.3fr .7fr;gap:20px}.pap{background:repeating-linear-gradient(0deg,#e6ca8b 0 6px,#e2c582 6px 12px);color:var(--t);border:2px solid #8f6225;border-radius:18px;padding:28px;box-shadow:0 18px 50px #0006}.pap h2{margin:0 0 8px;color:#153a50;font-size:clamp(30px,4vw,50px)}.status,.panel{background:#062234d9;border:1px solid #f0cf7244;border-radius:18px;padding:22px;box-shadow:0 18px 50px #0005}.status h3,.panel h3,.sec h2{color:#f0cf72;margin-top:0}.row{display:flex;justify-content:space-between;border-bottom:1px solid #fff1;padding:10px 0}.sec{margin:24px 0 14px}.decks{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.deck{min-height:310px;perspective:900px;cursor:pointer;position:relative}.inner{position:absolute;inset:0;transition:.7s;transform-style:preserve-3d}.deck.flipped .inner{transform:rotateY(180deg)}.face{position:absolute;inset:0;border-radius:18px;backface-visibility:hidden;border:2px solid #f0cf7288;overflow:hidden;box-shadow:0 18px 45px #0006}.back{display:grid;place-items:center;text-align:center;padding:22px;background:#12334f}.deck[data-type="pharaoh"] .back{background:#715018}.deck[data-type="plague"] .back{background:#661d20}.sym{font-size:65px}.back h3{color:#ffe7a3;letter-spacing:.12em;text-transform:uppercase}.front{transform:rotateY(180deg);background:linear-gradient(#eed79f,#d8b56d);color:#2d2113;padding:24px;display:flex;flex-direction:column}.front p{font-family:system-ui,sans-serif;line-height:1.5;flex:1}.actions{display:flex;gap:8px}.actions button{flex:1;border:0;border-radius:10px;padding:10px;font-weight:700;cursor:pointer}.draw{background:#103f61;color:white}.close{background:#d3a43a;color:#24170c}
-.tools{display:grid;grid-template-columns:.9fr 1.1fr;gap:18px}.dicezone{display:flex;gap:18px;align-items:center;flex-wrap:wrap}.die{width:112px;height:112px;border-radius:22px;background:#f4e9c9;color:#17212a;display:grid;place-items:center;font-size:58px;font-weight:800;box-shadow:inset 0 -8px #0001,0 14px 28px #0006}.die.roll{animation:roll .55s}@keyframes roll{35%{transform:rotate(17deg) scale(.86)}70%{transform:rotate(-14deg) scale(1.06)}}.rollbtn{border:0;border-radius:12px;background:linear-gradient(#f0cf72,#c9912b);padding:13px 18px;font-weight:800;cursor:pointer}.rollbtn:disabled{opacity:.35}.legend{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}.li{font-family:system-ui,sans-serif;background:#ffffff0d;border-radius:12px;padding:11px;display:flex;gap:9px}.li small{display:block;color:#b9ced7}
-.modal{position:fixed;inset:0;z-index:70;background:#000b;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(10px)}.modal.show{display:flex}.setup{width:min(640px,96vw);background:linear-gradient(#ecd595,#d6ae65);color:#24190e;border:2px solid #8b5e20;border-radius:22px;padding:28px}.opts{display:grid;grid-template-columns:1fr 1fr;gap:12px}.opt{border:2px solid #271b0b44;background:#fff4;border-radius:16px;padding:18px;cursor:pointer}.opt.sel{border-color:#0b5d83;background:#0b5d8322}.cont{width:100%;margin-top:18px;padding:12px;border:0;border-radius:12px;background:#0b4f72;color:#fff;font-weight:800;cursor:pointer}.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,30px);background:#efe0b7;color:#20160d;border:1px solid #c79b36;border-radius:12px;padding:11px 16px;opacity:0;transition:.25s}.toast.show{opacity:1;transform:translate(-50%,0)}
-@media(max-width:850px){.hero,.tools,.decks{grid-template-columns:1fr}}@media(max-width:560px){.opts,.legend{grid-template-columns:1fr}.top{align-items:flex-start;flex-direction:column}}
-</style></head><body>
-<section id="intro"><div class="mist"></div><div class="stage"><div class="branch l" id="bl"><div class="stem"></div></div><div class="branch r" id="br"><div class="stem"></div></div><div class="fanwrap l"><div class="fan"></div><div class="handle"></div></div><div class="fanwrap r"><div class="fan"></div><div class="handle"></div></div></div><div class="sand"></div><div class="intro"><div class="eye">𓂀</div><h1>TRAVESSIA DO NILO</h1><p>Complemento digital do tabuleiro</p><button class="enter" id="enter" onclick="startTemple()">ENTRAR NO TEMPLO</button></div></section>
-<div id="app"><header class="top"><div class="brand">𓂀 TRAVESSIA DO NILO</div><div class="chips"><button class="chip" id="cardsBtn">Cartas</button><button class="chip" id="diceBtn">Dado</button><button class="chip" id="restart">Reabrir entrada</button></div></header>
-<section class="hero"><div class="pap"><h2>O Nilo decide o caminho.</h2><p>Complemento digital do tabuleiro físico. Use aqui as cartas e, se quiser, o dado digital.</p><div style="margin-top:18px;letter-spacing:.3em;color:#5b3e18">𓁹 𓂀 𓅓 𓆣 𓇯 𓋹</div></div><div class="status"><h3>Estado da partida</h3><div class="row"><span>Dado</span><b id="ds">Não definido</b></div><div class="row"><span>Última carta</span><b id="lc">Nenhuma</b></div><div class="row"><span>Último dado</span><b id="ld">—</b></div></div></section>
-<main class="main"><div class="sec"><h2>Baralhos</h2><p>Toque em um baralho para virar uma carta.</p></div><section class="decks" id="decks">
-<article class="deck" data-type="question"><div class="inner"><div class="face back"><div><div class="sym">❓</div><h3>Perguntas</h3><small>Acertou? Avance 2 casas.</small></div></div><div class="face front"><small>BARALHO DE PERGUNTAS</small><h3 class="ct">Pergunta</h3><p class="txt"></p><div class="actions"><button class="draw">Nova carta</button><button class="close">Virar</button></div></div></div></article>
-<article class="deck" data-type="pharaoh"><div class="inner"><div class="face back"><div><div class="sym">👑</div><h3>Faraó</h3><small>Receba um benefício.</small></div></div><div class="face front"><small>BARALHO DO FARAÓ</small><h3 class="ct">Benefício</h3><p class="txt"></p><div class="actions"><button class="draw">Nova carta</button><button class="close">Virar</button></div></div></div></article>
-<article class="deck" data-type="plague"><div class="inner"><div class="face back"><div><div class="sym">🩸</div><h3>Pragas</h3><small>Sofra a penalidade indicada.</small></div></div><div class="face front"><small>BARALHO DAS PRAGAS</small><h3 class="ct">Praga</h3><p class="txt"></p><div class="actions"><button class="draw">Nova carta</button><button class="close">Virar</button></div></div></div></article>
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Travessia do Nilo</title>
+<meta name="theme-color" content="#b67b29">
+<style>
+:root{
+  --ink:#1f160d;--blue:#073b5b;--blue2:#0a557d;--gold:#c68a27;--gold2:#f0cf72;
+  --pap:#d9b976;--pap2:#f0d79b;--dark:#20150c;--shadow:0 20px 50px #29170c55
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:Georgia,"Times New Roman",serif;color:var(--ink);background:#a46b27}
+button{font:inherit}
+body{
+  background:
+    linear-gradient(#6e451988,#6e451955),
+    radial-gradient(circle at 22% 10%,#f8e7b455 0 2px,transparent 3px),
+    radial-gradient(circle at 72% 32%,#4b2d1422 0 1px,transparent 2px),
+    repeating-linear-gradient(0deg,#d7b36d 0 2px,#ddb975 2px 5px,#d2ac65 5px 7px);
+  background-attachment:fixed
+}
+body:before{
+  content:"𓂀 𓁹 𓆣 𓇯 𓏤 𓋹 𓎛 𓄿 𓅓 𓆓 𓇌 𓂋";
+  position:fixed;inset:0;pointer-events:none;z-index:-1;
+  color:#6e47161b;font-size:70px;line-height:1.8;letter-spacing:.35em;
+  overflow:hidden;transform:rotate(-3deg) scale(1.12)
+}
+.frame{
+  position:fixed;inset:12px;pointer-events:none;z-index:60;border:3px solid var(--blue);
+  box-shadow:inset 0 0 0 3px var(--gold),inset 0 0 0 7px var(--blue),0 0 0 2px #6c421b
+}
+.frame:before,.frame:after{
+  content:"𓆣 𓂀 𓋹 𓂀 𓆣";position:absolute;left:50%;transform:translateX(-50%);
+  color:var(--gold2);background:var(--blue);padding:4px 22px;letter-spacing:.35em;border:2px solid var(--gold)
+}
+.frame:before{top:-3px}.frame:after{bottom:-3px}
+
+/* ENTRADA */
+#intro{
+  position:fixed;inset:0;z-index:50;overflow:hidden;display:grid;place-items:center;
+  background:
+    linear-gradient(#6d45152b,#5b361328),
+    repeating-linear-gradient(0deg,#dabd7e 0 3px,#e1c486 3px 6px,#d4b471 6px 9px);
+  transition:opacity .85s ease,visibility .85s ease
+}
+#intro:before{
+  content:"𓂀 𓏤 𓇌 𓂋 𓅓 𓄿 𓆓 𓋹 𓇯 𓎛 𓆣";
+  position:absolute;inset:0;color:#67411427;font-size:54px;line-height:1.7;letter-spacing:.42em;
+  padding:34px;overflow:hidden
+}
+#intro.hidden{opacity:0;visibility:hidden;pointer-events:none}
+.side{position:absolute;top:0;bottom:0;width:33vw;min-width:280px;max-width:540px;pointer-events:none;z-index:3}
+.side.left{left:0}.side.right{right:0}
+.fan{position:absolute;top:48%;width:470px;height:500px;filter:drop-shadow(0 24px 18px #4b2b1740)}
+.fan.left{left:-180px;transform:translateY(-50%) rotate(-8deg)}
+.fan.right{right:-180px;transform:translateY(-50%) scaleX(-1) rotate(-8deg)}
+.feather{
+  position:absolute;left:48%;bottom:118px;width:65px;height:315px;border-radius:80% 80% 45% 45%;
+  transform-origin:50% 100%;
+  background:
+    radial-gradient(ellipse at 48% 28%,#f7eed9 0 34%,#dfd0ae 55%,#c4ad82 77%,#8d6a3a 100%);
+  border:2px solid #9d782f66;box-shadow:inset 0 0 20px #fff8,0 2px 6px #3d240d22
+}
+.feather:after{
+  content:"";position:absolute;left:50%;top:22px;bottom:22px;width:2px;background:#b8965a99
+}
+.fan .f1{transform:rotate(-55deg)}.fan .f2{transform:rotate(-43deg)}.fan .f3{transform:rotate(-31deg)}
+.fan .f4{transform:rotate(-19deg)}.fan .f5{transform:rotate(-7deg)}.fan .f6{transform:rotate(7deg)}
+.fan .f7{transform:rotate(19deg)}.fan .f8{transform:rotate(31deg)}.fan .f9{transform:rotate(43deg)}
+.fan .f10{transform:rotate(55deg)}
+.fan-core{
+  position:absolute;left:120px;bottom:86px;width:275px;height:120px;border-radius:70% 70% 35% 35%;
+  background:
+   radial-gradient(circle at 50% 24%,#163e89 0 10px,#d5a638 11px 17px,transparent 18px),
+   repeating-conic-gradient(from 220deg at 50% 100%,#0a4071 0 8deg,#d7aa3e 8deg 14deg,#8d5b1d 14deg 18deg);
+  border:5px solid #c99732;box-shadow:inset 0 0 0 3px #153f76
+}
+.handle{position:absolute;left:245px;bottom:-2px;width:20px;height:150px;border-radius:20px;background:linear-gradient(90deg,#7e501c,#e4bd58,#5e3715);transform:rotate(20deg)}
+.branch{position:absolute;width:190px;height:360px;filter:drop-shadow(0 10px 8px #4b2b172a)}
+.branch.l1{left:2px;top:0}.branch.l2{left:90px;top:27%;transform:scale(.82) rotate(11deg)}
+.branch.l3{left:18px;bottom:0;transform:scale(.92) rotate(-8deg)}
+.branch.r1{right:2px;top:0;transform:scaleX(-1)}.branch.r2{right:90px;top:27%;transform:scale(-.82,.82) rotate(11deg)}
+.branch.r3{right:18px;bottom:0;transform:scale(-.92,.92) rotate(-8deg)}
+.stem{position:absolute;left:92px;top:0;width:9px;height:350px;border-radius:9px;background:linear-gradient(90deg,#75501d,#d2a646,#6b4318);transform:rotate(12deg)}
+.leaf{position:absolute;width:95px;height:30px;border-radius:100% 0 100% 0;background:linear-gradient(90deg,#233f23,#476634 60%,#b38a2f);border-bottom:1px solid #d3a84c;transform-origin:0 50%}
+.branch .leaf:nth-child(2){left:91px;top:25px;transform:rotate(-25deg)}
+.branch .leaf:nth-child(3){left:91px;top:75px;transform:rotate(-10deg)}
+.branch .leaf:nth-child(4){left:91px;top:125px;transform:rotate(-25deg)}
+.branch .leaf:nth-child(5){left:91px;top:175px;transform:rotate(-5deg)}
+.branch .leaf:nth-child(6){left:91px;top:225px;transform:rotate(-22deg)}
+.branch .leaf:nth-child(7){left:91px;top:275px;transform:rotate(-6deg)}
+.branch .leaf.leftleaf{left:97px;transform-origin:0 50%;scale:-1 1}
+.center{
+  position:relative;z-index:8;width:min(760px,86vw);text-align:center;padding:62px 36px 52px;
+  background:#e6ca8dcc;border:3px solid #895c1f;border-radius:18px;box-shadow:var(--shadow),inset 0 0 0 2px #f7e5ae
+}
+.center:before{content:"";position:absolute;inset:14px;border:1px solid #9e722e;border-radius:12px}
+.center:after{content:"";position:absolute;left:26px;right:26px;top:18px;height:18px;border-radius:20px;background:linear-gradient(90deg,var(--blue),var(--gold),var(--blue));border:1px solid #8a5a1c}
+.eye{position:relative;z-index:1;font-size:52px;color:var(--blue)}
+.title{position:relative;z-index:1;margin:6px 0 8px;font-size:clamp(42px,8vw,88px);line-height:.95;letter-spacing:.06em;text-transform:uppercase;color:var(--blue);text-shadow:0 2px #f5e2a7}
+.subtitle{position:relative;z-index:1;margin:0 0 28px;color:#4c321a;font:700 13px/1.4 system-ui,sans-serif;letter-spacing:.24em;text-transform:uppercase}
+.enter{position:relative;z-index:1;border:2px solid #8d5d1e;border-radius:999px;padding:15px 34px;background:linear-gradient(#f2d47b,#bd8126);color:#27170a;font-weight:900;letter-spacing:.08em;cursor:pointer;box-shadow:0 12px 28px #4d2d1535,inset 0 1px #fff8}
+.enter:hover{transform:translateY(-2px)}
+.hieros{position:relative;z-index:1;margin-top:19px;color:#69451d;font-size:18px;letter-spacing:.3em}
+#intro.opening .fan.left{animation:fanL 1.55s cubic-bezier(.2,.8,.16,1) forwards}
+#intro.opening .fan.right{animation:fanR 1.55s cubic-bezier(.2,.8,.16,1) forwards}
+#intro.opening .branch.l1,#intro.opening .branch.l2,#intro.opening .branch.l3{animation:branchL 1.55s cubic-bezier(.2,.8,.16,1) forwards}
+#intro.opening .branch.r1,#intro.opening .branch.r2,#intro.opening .branch.r3{animation:branchR 1.55s cubic-bezier(.2,.8,.16,1) forwards}
+@keyframes fanL{0%{transform:translateY(-50%) rotate(-8deg)}48%{transform:translate(23%,-50%) rotate(-1deg)}100%{transform:translate(-55%,-62%) rotate(-16deg);opacity:0}}
+@keyframes fanR{0%{transform:translateY(-50%) scaleX(-1) rotate(-8deg)}48%{transform:translate(-23%,-50%) scaleX(-1) rotate(-1deg)}100%{transform:translate(55%,-62%) scaleX(-1) rotate(-16deg);opacity:0}}
+@keyframes branchL{0%{}48%{translate:10% -3%}100%{translate:-34% -12%;opacity:0}}
+@keyframes branchR{0%{}48%{translate:-10% -3%}100%{translate:34% -12%;opacity:0}}
+.sand,.sand:before,.sand:after{
+  content:"";position:absolute;inset:-15%;z-index:14;pointer-events:none;opacity:0;
+  background:
+   radial-gradient(circle at 8% 21%,#5c351f99 0 1px,transparent 1.6px),
+   radial-gradient(circle at 19% 68%,#f0c97a99 0 1.2px,transparent 1.8px),
+   radial-gradient(circle at 36% 42%,#7f4d2e88 0 1.5px,transparent 2px),
+   radial-gradient(circle at 54% 74%,#f5d99e99 0 1.1px,transparent 1.8px),
+   radial-gradient(circle at 76% 39%,#8f593288 0 1.3px,transparent 2px),
+   radial-gradient(circle at 91% 61%,#e4b96a99 0 1.1px,transparent 1.8px),
+   radial-gradient(ellipse at 20% 48%,#d6a85cbb,transparent 24%),
+   radial-gradient(ellipse at 51% 50%,#b87939bb,transparent 26%),
+   radial-gradient(ellipse at 82% 54%,#e0b76caa,transparent 24%);
+  background-size:7px 7px,10px 10px,8px 8px,11px 11px,9px 9px,8px 8px,auto,auto,auto;
+  filter:blur(.6px)
+}
+.sand:before{filter:blur(4px)}.sand:after{filter:blur(10px)}
+#intro.opening .sand,#intro.opening .sand:before,#intro.opening .sand:after{animation:sand 1.55s cubic-bezier(.2,.8,.16,1) forwards}
+@keyframes sand{0%{opacity:0;transform:translateX(-30%) scale(.92)}18%{opacity:.35}45%{opacity:.9}66%{opacity:1}84%{opacity:.75}100%{opacity:0;transform:translateX(26%) scale(1.08)}}
+
+/* SITE */
+#app{opacity:0;transform:translateY(12px);transition:.7s;min-height:100vh}
+#app.ready{opacity:1;transform:none}
+.topbar{position:sticky;top:0;z-index:20;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:13px 4vw;background:#073b5bf2;color:#fff;border-bottom:3px solid var(--gold);box-shadow:0 8px 18px #24150933}
+.brand{display:flex;gap:12px;align-items:center}.brand strong{display:block;color:var(--gold2);text-transform:uppercase;letter-spacing:.08em}.brand small{color:#dae4e7}
+.nav{display:flex;gap:8px;flex-wrap:wrap}.nav button{border:1px solid #d6ac4b;background:#0b4a6f;color:#fff;border-radius:999px;padding:8px 12px;cursor:pointer}
+.hero,.main{max-width:1220px;margin:auto;padding:30px 4vw 16px}
+.hero{display:grid;grid-template-columns:1.05fr .95fr;gap:22px}@media(max-width:900px){.hero{grid-template-columns:1fr}}
+.paper,.panel{border-radius:18px;box-shadow:var(--shadow)}
+.paper{position:relative;padding:30px;background:#e8cf95e8;border:3px solid #8d5b1c;color:var(--ink)}
+.paper:before{content:"";position:absolute;inset:12px;border:1px solid #a27432;border-radius:12px}
+.paper h1{position:relative;margin-top:0;color:var(--blue);font-size:clamp(28px,4vw,50px)}.paper p{position:relative;font-family:system-ui,sans-serif;line-height:1.55}
+.panel{position:relative;padding:22px;background:#083a56ee;border:3px solid #c58d2d;color:#fff}.panel:before{content:"";position:absolute;inset:10px;border:1px solid #e6c56f55;border-radius:12px;pointer-events:none}.panel h3,.section h2{color:var(--gold2)}
+.row{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid #ffffff1d}.row:last-child{border-bottom:none}.row span{color:#c9d8dd}
+.section{margin:30px 0 15px}.section h2{display:flex;gap:12px;align-items:center}.section h2:before,.section h2:after{content:"";flex:1;height:2px;background:linear-gradient(90deg,transparent,#c8912f,transparent)}.section p{margin:0;color:#4b321b;font:600 14px/1.5 system-ui,sans-serif}
+.decks{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}@media(max-width:980px){.decks{grid-template-columns:1fr}}
+.deck{position:relative;min-height:510px;perspective:1200px;cursor:pointer}.deck-inner{position:absolute;inset:0;transform-style:preserve-3d;transition:.75s}.deck.flipped .deck-inner{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;border-radius:18px;overflow:hidden;backface-visibility:hidden;box-shadow:var(--shadow)}
+.back,.front{border:7px solid var(--gold);outline:5px solid var(--blue);outline-offset:-11px}
+.back{
+  display:grid;place-items:center;text-align:center;padding:34px;
+  background:
+   linear-gradient(#e9cd90dd,#e8c57fdd),
+   repeating-linear-gradient(90deg,transparent 0 14px,#9c6f2b11 14px 16px);
+  color:var(--blue)
+}
+.back:before,.front:before{content:"𓋹 𓂀 𓆣 𓎛 𓄿 𓇯 𓏤";position:absolute;left:0;right:0;top:0;padding:8px;color:var(--gold2);background:var(--blue);letter-spacing:.18em;text-align:center;border-bottom:2px solid var(--gold)}
+.back:after,.front:after{content:"𓂋 𓅓 𓆓 𓁹 𓇌 𓋹 𓂀";position:absolute;left:0;right:0;bottom:0;padding:8px;color:var(--gold2);background:var(--blue);letter-spacing:.18em;text-align:center;border-top:2px solid var(--gold)}
+.back .scarab{font-size:48px}.back h2{font-size:36px;margin:10px 0 4px;line-height:.95;text-transform:uppercase}.back p{margin:0;font-weight:700;letter-spacing:.05em}
+.front{transform:rotateY(180deg);padding:56px 30px 54px;background:linear-gradient(#ecd496,#e1bd72);color:var(--ink);display:flex;flex-direction:column}
+.front h3{margin:0 0 12px;text-align:center;color:#31200f;font-size:18px}.front .opts{font-size:14px;line-height:1.42}.front .answer{margin-top:auto;text-align:center;font-weight:800}.front .move{text-align:center;font-weight:900;color:var(--blue)}
+.actions{position:absolute;left:12px;right:12px;bottom:43px;z-index:4;display:flex;gap:7px}.actions button{flex:1;border:0;border-radius:9px;padding:9px;font-weight:800;cursor:pointer}.draw{background:#0b4a6f;color:#fff}.close{background:#d0a03a;color:#231508}
+.gallery{display:grid;grid-template-columns:repeat(4,1fr);gap:15px}@media(max-width:1100px){.gallery{grid-template-columns:repeat(3,1fr)}}@media(max-width:760px){.gallery{grid-template-columns:repeat(2,1fr)}}@media(max-width:500px){.gallery{grid-template-columns:1fr}}
+.mini{position:relative;min-height:390px;border:5px solid var(--gold);outline:4px solid var(--blue);outline-offset:-9px;border-radius:14px;background:#e8c985;padding:45px 20px 40px;color:var(--ink);cursor:pointer;box-shadow:var(--shadow)}.mini:before{content:"𓋹 𓂀 𓆣 𓎛 𓄿";position:absolute;top:0;left:0;right:0;padding:7px;background:var(--blue);color:var(--gold2);text-align:center}.mini h4{margin:0 0 8px;text-align:center}.mini p{font-size:12px;line-height:1.35}.mini b{display:block;text-align:center;color:var(--blue)}
+.more{display:none}.toggle{margin-top:14px;border:1px solid #d2a13d;background:#0b4a6f;color:#fff;border-radius:999px;padding:10px 14px;cursor:pointer}
+.tools{display:grid;grid-template-columns:.9fr 1.1fr;gap:18px}@media(max-width:850px){.tools{grid-template-columns:1fr}}.dice-zone{display:flex;gap:18px;align-items:center;flex-wrap:wrap}.die{width:112px;height:112px;border-radius:22px;background:#f4e9c9;color:#17212a;display:grid;place-items:center;font-size:58px;font-weight:800;box-shadow:inset 0 -8px #0001,0 14px 28px #0005}.die.rolling{animation:roll .55s ease}@keyframes roll{35%{transform:rotate(17deg) scale(.86)}70%{transform:rotate(-14deg) scale(1.06)}}.roll{border:0;border-radius:12px;background:linear-gradient(#f0cf72,#c9912b);color:#221508;padding:13px 18px;font-weight:800;cursor:pointer}.roll:disabled{opacity:.38}
+.modal{position:fixed;inset:0;z-index:70;background:#000b;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(8px)}.modal.show{display:flex}.setup{width:min(640px,96vw);background:linear-gradient(#ecd595,#d6ae65);color:#24190e;border:3px solid #80551c;border-radius:22px;padding:28px;box-shadow:0 30px 80px #0008}.setup h2{margin:0 0 8px;color:var(--blue)}.options{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}@media(max-width:560px){.options{grid-template-columns:1fr}}.option{border:2px solid #46311644;background:#fff4;border-radius:16px;padding:18px;cursor:pointer;text-align:left}.option.selected{border-color:var(--blue);background:#0b5d831c}.continue{margin-top:18px;width:100%;padding:12px;border:0;border-radius:12px;background:var(--blue);color:#fff;font-weight:800;cursor:pointer}
+footer{text-align:center;padding:28px;background:#073b5be8;color:#eadcae;border-top:3px solid var(--gold);font:13px system-ui,sans-serif}
+</style>
+</head>
+<body>
+<div class="frame"></div>
+<section id="intro">
+<div class="side left">
+  <div class="branch l1"><div class="stem"></div><i class="leaf"></i><i class="leaf"></i><i class="leaf"></i><i class="leaf"></i><i class="leaf"></i><i class="leaf"></i></div>
+  <div class="branch l2"><div class="stem"></div><i class="leaf"></i><i class="leaf"></i><i class="leaf"></i><i class="leaf"></i><i class="leaf"></i><i class="leaf"></i></div>
+  <div class="branch l3"><div class="stem"></div><i class="leaf"></i><i class="leaf"></i><i class="leaf"></i><i class="leaf"></i><i class="leaf"></i><i class="leaf"></i></div>
+  <div class="fan left"><i class="feather f1"></i><i class="feather f2"></i><i class="feather f3"></i><i class="feather f4"></i><i class="feather f5"></i><i class="feather f6"></i><i class="feather f7"></i><i class="feather f8"></i><i class="feather f9"></i><i class="feather f10"></i><div class="fan-core"></div><div class="handle"></div></div>
+</div>
+<div class="side right">
+  <div class="branch r1"><div class="stem"></div><i class="leaf"></i><i class="leaf"></i><i class="leaf"></i><i class="leaf"></i><i class="leaf"></i><i class="leaf"></i></div>
+  <div class="branch r2"><div class="stem"></div><i class="leaf"></i><i class="leaf"></i><i class="leaf"></i><i class="leaf"></i><i class="leaf"></i><i class="leaf"></i></div>
+  <div class="branch r3"><div class="stem"></div><i class="leaf"></i><i class="leaf"></i><i class="leaf"></i><i class="leaf"></i><i class="leaf"></i><i class="leaf"></i></div>
+  <div class="fan right"><i class="feather f1"></i><i class="feather f2"></i><i class="feather f3"></i><i class="feather f4"></i><i class="feather f5"></i><i class="feather f6"></i><i class="feather f7"></i><i class="feather f8"></i><i class="feather f9"></i><i class="feather f10"></i><div class="fan-core"></div><div class="handle"></div></div>
+</div>
+<div class="sand"></div>
+<div class="center"><div class="eye">𓂀</div><h1 class="title">Travessia do Nilo</h1><div class="subtitle">Complemento digital do tabuleiro</div><button class="enter" onclick="startTemple()">ENTRAR NO TEMPLO</button><div class="hieros">𓁹 𓂀 𓆣 𓇯 𓏤 𓋹 𓎛 𓄿</div></div>
 </section>
-<div class="sec"><h2>Apoio de partida</h2></div><section class="tools"><div class="panel" id="dicePanel"><h3>Dado digital</h3><div class="dicezone"><div class="die" id="die">𓏺</div><div><button class="rollbtn" id="roll">Lançar dado</button><p>Você pode jogar com dado físico ou digital.</p></div></div></div>
-<div class="panel"><h3>Legenda rápida</h3><div class="legend">
-<div class="li">🔵 <div><b>Casa comum</b><small>Nada acontece.</small></div></div><div class="li">❓ <div><b>Perguntas</b><small>Acertando, avance 2 casas.</small></div></div><div class="li">👑 <div><b>Faraó</b><small>Receba um benefício.</small></div></div><div class="li">🩸 <div><b>Pragas</b><small>Cumpra a penalidade.</small></div></div><div class="li">🏜️ <div><b>Entrada do Deserto</b><small>Siga para o caminho alternativo.</small></div></div><div class="li">🌪️ <div><b>Tempestade</b><small>Volte 2 casas.</small></div></div><div class="li">☀️ <div><b>Calor intenso</b><small>Volte 4 casas em direção ao Nilo.</small></div></div><div class="li">🐍 <div><b>Cobras</b><small>Volte 1 casa.</small></div></div><div class="li">🦂 <div><b>Escorpiões</b><small>Volte 3 casas.</small></div></div><div class="li">🔵 <div><b>Retorno ao Nilo</b><small>Volte ao caminho principal.</small></div></div><div class="li">🏆 <div><b>Três Pirâmides</b><small>Chegada e vitória.</small></div></div><div class="li">🏁 <div><b>Início</b><small>Todos começam aqui.</small></div></div>
-</div></div></section></main></div>
-<div class="modal" id="modal"><div class="setup"><div style="font-size:34px;color:#805c18">𓂀</div><h2>Preparar a travessia</h2><p>Escolha se esta partida usará o dado digital.</p><div class="opts"><button class="opt sel" data-d="1"><b>🎲 Usar dado digital</b><br><small>Lançamentos de 1 a 6.</small></button><button class="opt" data-d="0"><b>✋ Sem dado digital</b><br><small>Use o dado físico.</small></button></div><button class="cont" id="cont">Entrar no menu principal</button></div></div><div class="toast" id="toast"></div>
+
+<div id="app">
+<header class="topbar"><div class="brand"><div style="font-size:28px;color:var(--gold2)">𓂀</div><div><strong>Travessia do Nilo</strong><small>cartas • dado • apoio ao tabuleiro físico</small></div></div><div class="nav"><button id="cardsBtn">Baralhos</button><button id="galleryBtn">Perguntas</button><button id="diceBtn">Dado</button><button id="restartBtn">Reabrir entrada</button></div></header>
+<section class="hero"><div class="paper"><h1>O Nilo decide o caminho.</h1><p>O visual foi reconstruído a partir das artes do jogo: papiro, azul profundo, dourado, hieróglifos, leques ornamentais e ramos laterais. As cartas digitais usam as perguntas e efeitos enviados nas cartelas.</p></div><aside class="panel"><h3>Estado da partida</h3><div class="row"><span>Dado digital</span><strong id="diceStatus">Não definido</strong></div><div class="row"><span>Última carta</span><strong id="lastCard">Nenhuma</strong></div><div class="row"><span>Último dado</span><strong id="lastDie">—</strong></div></aside></section>
+
+<main class="main">
+<div class="section"><h2>Baralhos</h2><p>Clique no verso para sortear uma carta. O conteúdo abaixo vem das cartelas que você enviou.</p></div>
+<section class="decks" id="decks"></section>
+<div class="section" id="perguntas"><h2>Cartas de Perguntas</h2><p>As primeiras doze aparecem de imediato; as demais ficam no botão para a página não virar um papiro infinito, porque até os escribas tinham limites.</p></div>
+<section class="panel"><div class="gallery" id="gallery"></div><div class="more" id="more"></div><button class="toggle" id="toggle">Mostrar mais perguntas</button></section>
+<div class="section"><h2>Apoio de partida</h2><p>O tabuleiro físico continua sendo o centro da atividade.</p></div>
+<section class="tools"><div class="panel" id="dicePanel"><h3>Dado digital</h3><div class="dice-zone"><div class="die" id="die">𓏺</div><div><button class="roll" id="rollBtn">Lançar dado</button><p style="color:#c7d7dc;font-family:system-ui,sans-serif">Pode ser ativado ou desativado no início.</p></div></div></div><div class="panel"><h3>Referência rápida</h3><div class="row"><span>❓ Pergunta</span><strong>avance conforme a carta</strong></div><div class="row"><span>👑 Faraó</span><strong>receba o benefício</strong></div><div class="row"><span>🩸 Praga</span><strong>cumpra a penalidade</strong></div><div class="row"><span>🏜️ Deserto</span><strong>siga o caminho alternativo</strong></div></div></section>
+</main>
+<footer>Travessia do Nilo • complemento digital do jogo físico</footer>
+</div>
+
+<div class="modal" id="setupModal"><div class="setup"><div style="font-size:34px;color:#805c18">𓂀</div><h2>Preparar a travessia</h2><p style="font-family:system-ui,sans-serif">Escolha se esta partida usará o dado digital.</p><div class="options"><button class="option selected" data-dice="yes"><strong>🎲 Usar dado digital</strong><br><small>O site faz lançamentos de 1 a 6.</small></button><button class="option" data-dice="no"><strong>✋ Sem dado digital</strong><br><small>Use o dado físico.</small></button></div><button class="continue" id="continueBtn">Entrar no menu principal</button></div></div>
+
 <script>
-const S={dice:true},C={question:[{t:"Pergunta",x:"Use uma carta do Baralho de Perguntas. Se o jogador acertar, avance 2 casas."}],pharaoh:[{t:"Proteção do Faraó",x:"Benefício demonstrativo: avance 1 casa."},{t:"Favor Real",x:"Benefício demonstrativo: jogue novamente."},{t:"Bênção do Nilo",x:"Benefício demonstrativo: ignore a próxima penalidade."}],plague:[{t:"Tempestade de areia",x:"Volte 2 casas."},{t:"Calor intenso",x:"Volte 4 casas em direção ao Nilo."},{t:"Serpentes venenosas",x:"Volte 1 casa."},{t:"Escorpiões",x:"Volte 3 casas e fique seguro."}]};
-const q=s=>document.querySelector(s),intro=q("#intro"),app=q("#app"),modal=q("#modal"),ds=q("#ds"),lc=q("#lc"),ld=q("#ld"),die=q("#die"),roll=q("#roll"),toast=q("#toast");function msg(x){toast.textContent=x;toast.classList.add("show");setTimeout(()=>toast.classList.remove("show"),1600)}function upd(){ds.textContent=S.dice?"Ativado":"Desativado";roll.disabled=!S.dice;die.style.opacity=S.dice?1:.35}
-function branch(id){const b=q(id),ys=[6,13,21,30,40,51,62,73,84];ys.forEach((y,i)=>{let a=document.createElement("div"),d=document.createElement("div");a.className=d.className="leaf";a.style.top=y+"%";d.style.top=(y+3)+"%";a.style.transform="translateX(-8%) rotate("+(-25-(i%3)*6)+"deg)";d.style.transform="translateX(-86%) rotate("+(18+(i%3)*8)+"deg)";b.append(a,d)})}branch("#bl");branch("#br");
-function startTemple(){intro.classList.add("opening");setTimeout(()=>{intro.classList.add("closed");app.classList.add("ready");modal.classList.add("show")},1550)};window.startTemple=startTemple;document.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{document.querySelectorAll(".opt").forEach(x=>x.classList.remove("sel"));b.classList.add("sel");S.dice=b.dataset.d==="1"});q("#cont").onclick=()=>{modal.classList.remove("show");upd();msg(S.dice?"Dado digital ativado.":"Modo sem dado digital.")};
-document.querySelectorAll(".deck").forEach(d=>{let type=d.dataset.type;function fill(){let a=C[type],c=a[Math.floor(Math.random()*a.length)];d.querySelector(".ct").textContent=c.t;d.querySelector(".txt").textContent=c.x;lc.textContent=c.t}d.onclick=e=>{if(e.target.closest("button"))return;if(!d.classList.contains("flipped"))fill();d.classList.toggle("flipped")};d.querySelector(".draw").onclick=e=>{e.stopPropagation();fill()};d.querySelector(".close").onclick=e=>{e.stopPropagation();d.classList.remove("flipped")}});
-roll.onclick=()=>{if(!S.dice)return;die.classList.remove("roll");void die.offsetWidth;die.classList.add("roll");let i=0,z=setInterval(()=>{die.textContent=1+Math.floor(Math.random()*6);if(++i>7){clearInterval(z);let n=1+Math.floor(Math.random()*6);die.textContent=n;ld.textContent=n;msg("O dado caiu em "+n+".")}},65)};q("#restart").onclick=()=>{intro.classList.remove("closed","opening");app.classList.remove("ready")};q("#cardsBtn").onclick=()=>q("#decks").scrollIntoView({behavior:"smooth"});q("#diceBtn").onclick=()=>q("#dicePanel").scrollIntoView({behavior:"smooth"});upd();
-</script></body></html>
+const Q=[
+{q:"Na Lei da Frontalidade, o corpo humano era representado segundo determinadas convenções. Qual alternativa corresponde a essa característica?",o:["A) O corpo inteiro era sempre representado de frente.","B) A figura podia combinar cabeça e pernas de perfil com tronco e olhos apresentados de maneira frontal.","C) O artista utilizava perspectiva para criar profundidade realista.","D) As figuras eram representadas sempre em movimento."],a:"B",m:2},
+{q:"Por que a Lei da Frontalidade não deve ser considerada simplesmente uma incapacidade técnica?",o:["A) Porque os egípcios não conheciam a representação humana.","B) Porque era utilizada somente por artistas iniciantes.","C) Porque fazia parte de um sistema visual intencional, ligado à clareza e ao simbolismo das figuras.","D) Porque surgiu apenas depois da influência romana."],a:"C",m:2},
+{q:"A combinação de diferentes pontos de vista em uma mesma figura tinha como consequência:",o:["A) destacar as partes consideradas mais importantes para sua identificação e representação.","B) criar uma perspectiva fotográfica.","C) produzir imagens abstratas.","D) eliminar o significado religioso das figuras."],a:"A",m:2},
+{q:"Quando uma figura aparece maior que outras em uma pintura egípcia, isso pode indicar:",o:["A) que a pessoa estava fisicamente mais próxima do observador.","B) que o artista desconhecia proporções.","C) que a figura representava alguém de maior importância.","D) que a pessoa era necessariamente mais velha."],a:"C",m:2},
+{q:"A ausência de uma perspectiva semelhante à utilizada na arte moderna está relacionada:",o:["A) à preferência por representar simbolicamente as informações importantes da cena.","B) à falta de qualquer conhecimento matemático.","C) à proibição religiosa de representar espaços.","D) ao uso exclusivo de pinturas abstratas."],a:"A",m:2},
+{q:"Em muitas pinturas funerárias, cenas de alimentos, animais e atividades cotidianas tinham função além da decoração. Qual?",o:["A) Representar apenas momentos de lazer dos artistas.","B) Registrar acontecimentos militares.","C) Servir como propaganda comercial.","D) Relacionar-se às necessidades e atividades que poderiam acompanhar o morto no além."],a:"D",m:2},
+{q:"A permanência de padrões na arte egípcia durante longos períodos está relacionada principalmente:",o:["A) à valorização de convenções tradicionais e de sua função religiosa e simbólica.","B) à inexistência de artistas criativos.","C) à proibição de qualquer inovação técnica.","D) à ausência de mudanças na sociedade egípcia."],a:"A",m:2},
+{q:"A arte egípcia pode ser considerada simbólica porque:",o:["A) evitava qualquer representação de ideias religiosas.","B) utilizava formas, posições, tamanhos e atributos para transmitir significados.","C) representava somente objetos encontrados no cotidiano.","D) buscava exclusivamente copiar a natureza."],a:"B",m:2},
+{q:"A relação entre arte e poder no Egito Antigo pode ser percebida quando:",o:["A) os governantes eram representados sem qualquer destaque.","B) os artistas produziam apenas obras para suas próprias casas.","C) monumentos e imagens reforçavam a autoridade dos faraós e sua ligação com o divino.","D) as obras religiosas eram proibidas pelo Estado."],a:"C",m:2},
+{q:"A presença de imagens, inscrições e objetos nos espaços funerários revela que:",o:["A) arte, escrita e religião estavam integradas às práticas relacionadas à morte.","B) as tumbas eram utilizadas apenas como espaços de armazenamento.","C) os egípcios não acreditavam em uma existência após a morte.","D) os objetos funerários tinham somente valor econômico."],a:"A",m:2},
+{q:"A associação entre faraó e divindade contribuía para:",o:["A) diminuir a autoridade política do governante.","B) separar completamente religião e governo.","C) fortalecer a legitimidade do poder do faraó perante a sociedade.","D) impedir a construção de templos."],a:"C",m:2},
+{q:"Qual característica melhor diferencia a arte egípcia de uma representação puramente realista?",o:["A) A busca exclusiva pela aparência natural das figuras.","B) A ausência de regras de representação.","C) A utilização apenas de cenas do cotidiano.","D) A combinação entre convenções visuais, simbolismo, religião e hierarquia social."],a:"D",m:2},
+{q:"Qual característica do Rio Nilo contribuiu diretamente para o desenvolvimento da agricultura no Egito Antigo?",o:["A) Suas águas eram utilizadas principalmente para a produção de sal.","B) Suas águas impediam a formação de áreas desérticas.","C) Seu curso permitia a irrigação de todas as regiões da África.","D) Suas cheias periódicas deixavam o solo mais fértil para o cultivo."],a:"D",m:1},
+{q:"Além da agricultura, qual era outra importante função do Rio Nilo para os egípcios?",o:["A) Servir como local exclusivo para cerimônias religiosas.","B) Servir como importante via de transporte e comunicação.","C) Fornecer pedras para a construção das pirâmides.","D) Separar o Egito de outros povos africanos."],a:"B",m:1},
+{q:"Na sociedade egípcia, os escribas possuíam uma função social importante porque:",o:["A) eram responsáveis exclusivamente pela construção das pirâmides.","B) comandavam os exércitos durante as guerras.","C) dominavam a escrita e registravam informações importantes da sociedade.","D) trabalhavam somente na agricultura durante as cheias do Nilo."],a:"C",m:1},
+{q:"Qual alternativa apresenta uma característica da organização social do Egito Antigo?",o:["A) Os agricultores ocupavam sempre a posição mais elevada da sociedade.","B) Os faraós não possuíam influência sobre a organização do Estado.","C) Todas as pessoas exerciam as mesmas funções e possuíam os mesmos privilégios.","D) A sociedade era organizada de forma hierárquica, com diferentes grupos e funções."],a:"D",m:1},
+{q:"Por que o faraó ocupava uma posição de grande importância na sociedade egípcia?",o:["A) Porque era responsável apenas pelas atividades comerciais do Egito.","B) Porque era escolhido pelos agricultores a cada ano.","C) Porque era uma autoridade política e também possuía forte caráter religioso.","D) Porque não participava das decisões políticas ou religiosas."],a:"C",m:1},
+{q:"A associação entre o faraó e a religião no Egito Antigo pode ser percebida pelo fato de que:",o:["A) o faraó era visto como uma autoridade ligada ao mundo divino e à manutenção da ordem.","B) os sacerdotes não possuíam nenhuma relação com o governo.","C) os faraós proibiam a construção de templos e monumentos religiosos.","D) o faraó era considerado completamente separado das questões religiosas."],a:"A",m:1},
+{q:"Os hieróglifos podem ser definidos como:",o:["A) um conjunto de esculturas utilizadas exclusivamente nos templos.","B) uma técnica utilizada para construir pirâmides.","C) um tipo de pintura utilizado apenas em tumbas reais.","D) um sistema de escrita utilizado pelos antigos egípcios, composto por sinais e símbolos."],a:"D",m:1},
+{q:"Por que os hieróglifos são importantes para o conhecimento atual sobre o Egito Antigo?",o:["A) Porque registravam exclusivamente os nomes dos faraós.","B) Porque permitem conhecer aspectos da língua, religião, política e cotidiano egípcio.","C) Porque eram utilizados somente como elementos decorativos.","D) Porque substituíam completamente as pinturas e esculturas."],a:"B",m:1},
+{q:"Anúbis era uma divindade egípcia frequentemente representada com características de um chacal. Ele estava especialmente associado:",o:["A) à agricultura e às plantações.","B) à morte, à mumificação e à proteção dos mortos.","C) ao comércio e à navegação.","D) às tempestades e às cheias do Rio Nilo."],a:"B",m:1},
+{q:"A religião egípcia influenciava diretamente a produção artística porque:",o:["A) somente os agricultores podiam produzir obras religiosas.","B) os egípcios não produziam arte com finalidade religiosa.","C) a religião egípcia proibia a representação de pessoas e animais.","D) muitas obras estavam relacionadas aos deuses, aos rituais e à crença na vida após a morte."],a:"D",m:1},
+{q:"A crença na vida após a morte contribuiu para o desenvolvimento de práticas como:",o:["A) a construção de estradas e pontes.","B) a criação de moedas e bancos.","C) a fabricação de instrumentos agrícolas.","D) a mumificação e a construção de túmulos."],a:"D",m:1},
+{q:"Os deuses egípcios eram frequentemente representados com características humanas e animais. Essa representação estava relacionada:",o:["A) à valorização exclusiva dos animais domésticos.","B) à tentativa de representar pessoas reais da sociedade.","C) à associação entre diferentes características dos seres humanos, dos animais e do mundo divino.","D) à ausência de crenças religiosas entre os egípcios."],a:"C",m:1},
+{q:"Qual era uma das principais razões para os egípcios realizarem a mumificação?",o:["A) Preservar os corpos para estudos científicos.","B) Impedir que os faraós fossem representados em pinturas.","C) Preparar o corpo para as crenças relacionadas à vida após a morte.","D) Transformar os mortos em sacerdotes."],a:"C",m:1},
+{q:"A mumificação demonstra que os egípcios acreditavam que:",o:["A) a preservação do corpo estava relacionada às crenças sobre a continuidade da existência após a morte.","B) os mortos deveriam ser esquecidos pela sociedade.","C) somente os animais poderiam ter uma vida após a morte.","D) o corpo não possuía nenhuma importância depois da morte."],a:"A",m:1},
+{q:"As grandes pirâmides do Egito Antigo estavam principalmente relacionadas:",o:["A) à realização de competições esportivas.","B) ao armazenamento de alimentos produzidos no campo.","C) à proteção das plantações durante as cheias do Nilo.","D) à função funerária e às crenças relacionadas aos faraós e à vida após a morte."],a:"D",m:1},
+{q:"A construção das grandes pirâmides demonstra que a sociedade egípcia possuía:",o:["A) apenas conhecimentos relacionados à agricultura.","B) conhecimentos de engenharia, organização do trabalho e capacidade de mobilizar grandes recursos.","C) uma sociedade sem divisão de funções entre seus trabalhadores.","D) pouca capacidade de organização e ausência de conhecimentos técnicos."],a:"B",m:1},
+{q:"Uma característica marcante da arquitetura egípcia antiga é:",o:["A) a construção exclusiva de pequenas casas feitas de madeira.","B) a preferência por construções móveis e temporárias.","C) a ausência de templos e monumentos religiosos.","D) o uso frequente de grandes construções monumentais relacionadas à religião e aos mortos."],a:"D",m:1},
+{q:"Além das pirâmides, quais construções são importantes exemplos da arquitetura egípcia?",o:["A) Teatros gregos e anfiteatros romanos.","B) Castelos medievais e catedrais.","C) Templos, túmulos e grandes complexos monumentais.","D) Arranha-céus e pontes metálicas."],a:"C",m:1},
+{q:"Nas esculturas egípcias, a representação das figuras geralmente buscava transmitir:",o:["A) movimento exagerado e espontâneo.","B) cenas exclusivamente humorísticas.","C) ausência completa de hierarquia entre as pessoas representadas.","D) estabilidade, permanência e importância social ou religiosa."],a:"D",m:1},
+{q:"Uma característica comum nas representações escultóricas egípcias era:",o:["A) a preocupação com a frontalidade e a aparência solene das figuras.","B) a representação das pessoas sempre em posições de movimento intenso.","C) a ausência de relação entre a escultura e a religião.","D) a utilização exclusiva de materiais frágeis."],a:"A",m:1},
+{q:"Nas pinturas egípcias, diferentes tamanhos das figuras poderiam indicar:",o:["A) a idade exata de cada personagem.","B) a distância entre os personagens.","C) a quantidade de tempo que a pessoa permaneceu viva.","D) a importância ou posição social de cada pessoa representada."],a:"D",m:1},
+{q:"Uma característica bastante conhecida da representação da figura humana na pintura egípcia é:",o:["A) a representação das figuras sempre de costas.","B) a utilização de perspectiva realista semelhante à pintura contemporânea.","C) a combinação de diferentes pontos de vista, como cabeça e pernas de perfil e tronco de frente.","D) a representação completamente de perfil em todas as partes do corpo."],a:"C",m:1},
+{q:"Por que muitas obras de Arte Egípcia apresentam figuras de maneira rígida e organizada?",o:["A) Porque a arte seguia convenções que buscavam manter a ordem, a estabilidade e a importância das figuras.","B) Porque os artistas não sabiam representar movimento.","C) Porque os egípcios não conheciam as cores.","D) Porque todas as obras eram feitas exclusivamente para decoração de casas."],a:"A",m:1},
+{q:"Qual alternativa reúne características presentes em muitas manifestações da Arte Egípcia?",o:["A) Realismo fotográfico, perspectiva matemática e valorização da individualidade.","B) Movimento intenso, improvisação e ausência de regras de representação.","C) Abstração geométrica, ausência de figuras humanas e uso exclusivo de formas simples.","D) Função religiosa e funerária, monumentalidade, simbologia e representação seguindo convenções."],a:"D",m:1},
+{q:"Durante o período de Amarna, algumas representações de Akhenaton e Nefertiti apresentam características diferentes das tradições egípcias anteriores. Isso indica:",o:["A) o abandono completo da arte religiosa.","B) a influência direta da arte grega sobre o Egito.","C) uma mudança nas convenções artísticas associada às transformações religiosas do período.","D) a proibição da representação dos governantes."],a:"C",m:2},
+{q:"A representação do faraó na arte egípcia geralmente evitava mostrar fraquezas físicas. Qual era a principal razão?",o:["A) Reforçar uma imagem idealizada de poder, estabilidade e autoridade.","B) Impedir que os escultores representassem pessoas reais.","C) Seguir exclusivamente modelos utilizados pelos povos vizinhos.","D) Demonstrar que os faraós não participavam de atividades religiosas."],a:"A",m:2},
+{q:"O famoso busto de Nefertiti se destaca dentro da arte egípcia por apresentar:",o:["A) uma representação totalmente abstrata da rainha.","B) maior naturalismo nos traços faciais, sem abandonar elementos de idealização.","C) uma cena exclusivamente relacionada à mumificação.","D) ausência de qualquer preocupação estética."],a:"B",m:2},
+{q:"A utilização de hieróglifos em monumentos funerários tinha também uma função simbólica porque:",o:["A) servia apenas para registrar informações econômicas.","B) substituía completamente as imagens dos deuses.","C) identificava exclusivamente os trabalhadores das tumbas.","D) contribuía para preservar nomes, fórmulas e informações ligadas à existência após a morte."],a:"D",m:2},
+{q:"Uma diferença importante entre os hieróglifos e um simples conjunto de desenhos decorativos é que os hieróglifos:",o:["A) possuíam funções linguísticas e podiam representar sons e palavras.","B) eram utilizados somente para representar animais.","C) não possuíam relação com a comunicação escrita.","D) eram símbolos criados exclusivamente para decorar esculturas."],a:"A",m:2},
+{q:"A Pedra de Roseta foi fundamental para o estudo dos hieróglifos porque:",o:["A) revelou como eram construídas as pirâmides.","B) apresentava o mesmo decreto escrito em diferentes sistemas, contribuindo para a decifração dos hieróglifos.","C) continha exclusivamente imagens de faraós.","D) descrevia detalhadamente o processo de mumificação."],a:"B",m:2},
+{q:"A representação de um deus egípcio com corpo humano e cabeça de animal deve ser entendida como:",o:["A) uma tentativa de retratar animais reais em tamanho humano.","B) uma representação sem significado religioso.","C) uma associação simbólica entre atributos humanos, animais e poderes divinos.","D) uma forma de representar exclusivamente sacerdotes."],a:"C",m:2},
+{q:"A diversidade de divindades no Egito Antigo demonstra que:",o:["A) todos os deuses possuíam exatamente as mesmas funções.","B) a religião egípcia não possuía símbolos próprios.","C) os egípcios rejeitavam qualquer representação visual dos deuses.","D) diferentes divindades estavam relacionadas a forças, lugares, atividades e aspectos da existência."],a:"D",m:2},
+{q:"A repetição de rituais religiosos no Egito Antigo estava relacionada principalmente:",o:["A) à manutenção da ordem religiosa e à relação entre humanos e divindades.","B) ao entretenimento da população.","C) à preparação exclusiva para guerras.","D) à substituição das atividades agrícolas."],a:"A",m:2},
+{q:"A presença de objetos em tumbas egípcias pode ser explicada pela crença de que:",o:["A) os mortos retornariam imediatamente para governar o Egito.","B) determinados objetos poderiam acompanhar ou auxiliar o morto na existência após a morte.","C) as tumbas funcionavam como depósitos comerciais.","D) os objetos tinham somente função decorativa."],a:"B",m:2},
+{q:"Qual relação melhor explica a existência da mumificação?",o:["A) A preservação do corpo estava relacionada a concepções sobre a continuidade da existência após a morte.","B) O processo tinha finalidade exclusivamente médica.","C) A mumificação era utilizada apenas para preservar corpos de soldados.","D) O objetivo principal era produzir esculturas realistas."],a:"A",m:2},
+{q:"No processo de mumificação, a retirada de órgãos internos demonstra:",o:["A) desprezo completo pelo corpo humano.","B) ausência de conhecimentos sobre anatomia.","C) a existência de práticas específicas de preservação relacionadas às crenças funerárias.","D) uma tentativa de transformar o morto em uma divindade."],a:"C",m:2}
+];
+const F=[
+{t:"REMO DO FARAÓ",x:"Você ganhou um remo do faraó. Na sua próxima jogada, acrescente 2 casas ao resultado do dado."},
+{t:"BARCO REAL",x:"O Faraó colocou uma embarcação à sua disposição para ajudá-lo a seguir pelo Nilo. Avance 3 casas."},
+{t:"PODER DO FARAÓ",x:"Escolha entre avançar 2 casas ou fazer um participante voltar 2 casas."},
+{t:"BÊNÇÃO DO FARAÓ",x:"Você poderá ignorar uma penalidade do deserto."},
+{t:"FAVOR DO FARAÓ",x:"O Faraó reconheceu sua coragem e decidiu ajudá-lo em sua jornada. Avance 2 casas."},
+{t:"ORDEM REAL",x:"Escolha um participante para ficar 1 rodada sem jogar."},
+{t:"PROTEÇÃO REAL",x:"Guarde esta carta e use-a para anular uma Praga do Egito."},
+{t:"CAMINHO REAL",x:"Os soldados do Faraó abriram um caminho seguro para você. Jogue o dado novamente."}
+];
+const P=[
+{t:"ÁGUAS EM SANGUE",x:"O Rio Nilo foi tomado por uma terrível praga e sua passagem foi interrompida. Volte 2 casas."},
+{t:"INVASÃO DAS RÃS",x:"Milhares de rãs tomaram o caminho e você precisa esperar que elas passem. Fique uma rodada sem jogar."},
+{t:"NUVEM DE INSETOS",x:"Uma grande quantidade de insetos tomou conta do caminho e você não consegue avançar. Volte 1 casa."},
+{t:"ENXAME DE MOSCAS",x:"O caminho ficou tomado por moscas. Você precisa recuar para encontrar um lugar seguro. Volte 2 casas."},
+{t:"DOENÇA DOS ANIMAIS",x:"Animais utilizados para transportar alimentos ficaram doentes. Fique uma rodada sem jogar."},
+{t:"TEMPESTADE DE GRANIZO",x:"Uma forte tempestade atingiu o caminho. É melhor procurar abrigo! Volte 2 casas."},
+{t:"INVASÃO DOS GAFANHOTOS",x:"Os gafanhotos destruíram parte das plantações e você precisa retornar para buscar alimentos. Volte 1 casa."},
+{t:"ESCURIDÃO",x:"Uma escuridão tomou conta do caminho. Sem conseguir enxergar, você perdeu sua direção. Volte 3 casas."}
+];
+const state={dice:true,last:"Nenhuma"};
+const intro=document.getElementById("intro"),app=document.getElementById("app"),setup=document.getElementById("setupModal"),lastCard=document.getElementById("lastCard"),diceStatus=document.getElementById("diceStatus"),lastDie=document.getElementById("lastDie"),die=document.getElementById("die"),rollBtn=document.getElementById("rollBtn");
+function startTemple(){if(intro.classList.contains("opening"))return;intro.classList.add("opening");setTimeout(()=>{intro.classList.add("hidden");app.classList.add("ready");setup.classList.add("show")},1450)}
+window.startTemple=startTemple;
+document.querySelectorAll(".option").forEach(b=>b.onclick=()=>{document.querySelectorAll(".option").forEach(x=>x.classList.remove("selected"));b.classList.add("selected");state.dice=b.dataset.dice==="yes"});
+document.getElementById("continueBtn").onclick=()=>{setup.classList.remove("show");diceStatus.textContent=state.dice?"Ativado":"Desativado";rollBtn.disabled=!state.dice;die.style.opacity=state.dice?1:.35};
+
+function backTitle(type){return type==="q"?["❓","TRAVESSIA DO NILO","CARTA DE PERGUNTAS"]:type==="f"?["𓆣","CARTA DO FARAÓ","BENEFÍCIO REAL"]:["𓆣","PRAGAS DO EGITO","PENALIDADE"]}
+function makeDeck(type){
+ const art=document.createElement("article");art.className="deck";const t=backTitle(type);
+ art.innerHTML='<div class="deck-inner"><div class="face back"><div><div class="scarab">'+t[0]+'</div><h2>'+t[1]+'</h2><p>'+t[2]+'</p><div style="font-size:60px;margin-top:24px">𓂀</div></div></div><div class="face front"><h3></h3><div class="opts"></div><div class="answer"></div><div class="move"></div><div class="actions"><button class="draw">Nova carta</button><button class="close">Virar</button></div></div></div>';
+ const front=art.querySelector(".front");
+ function draw(){
+   if(type==="q"){const c=Q[Math.floor(Math.random()*Q.length)];front.querySelector("h3").textContent=c.q;front.querySelector(".opts").innerHTML=c.o.join("<br><br>");front.querySelector(".answer").textContent="Resposta correta: "+c.a+".";front.querySelector(".move").textContent="AO RESPONDER CORRETAMENTE, AVANCE "+c.m+" CASA"+(c.m>1?"S":"")+".";state.last="Pergunta";}
+   else{const arr=type==="f"?F:P,c=arr[Math.floor(Math.random()*arr.length)];front.querySelector("h3").textContent=c.t;front.querySelector(".opts").textContent=c.x;front.querySelector(".answer").textContent="";front.querySelector(".move").textContent="";state.last=c.t;}
+   lastCard.textContent=state.last
+ }
+ art.onclick=e=>{if(e.target.closest("button"))return;if(!art.classList.contains("flipped"))draw();art.classList.toggle("flipped")};
+ art.querySelector(".draw").onclick=e=>{e.stopPropagation();draw()};art.querySelector(".close").onclick=e=>{e.stopPropagation();art.classList.remove("flipped")};return art
+}
+const decks=document.getElementById("decks");decks.append(makeDeck("q"),makeDeck("f"),makeDeck("p"));
+function mini(c,i){const b=document.createElement("button");b.className="mini";b.innerHTML="<h4>"+c.q+"</h4><p>"+c.o.join("<br>")+"</p><b>Resposta: "+c.a+" • avance "+c.m+"</b>";return b}
+Q.slice(0,12).forEach((c,i)=>gallery.appendChild(mini(c,i)));
+const mg=document.createElement("div");mg.className="gallery";Q.slice(12).forEach((c,i)=>mg.appendChild(mini(c,i+12)));more.appendChild(mg);
+toggle.onclick=()=>{const on=more.style.display==="block";more.style.display=on?"none":"block";toggle.textContent=on?"Mostrar mais perguntas":"Mostrar menos perguntas"};
+rollBtn.onclick=()=>{if(!state.dice)return;die.classList.remove("rolling");void die.offsetWidth;die.classList.add("rolling");let t=0;const timer=setInterval(()=>{die.textContent=Math.floor(Math.random()*6)+1;if(++t>7){clearInterval(timer);const n=Math.floor(Math.random()*6)+1;die.textContent=n;lastDie.textContent=n}},65)};
+restartBtn.onclick=()=>{intro.classList.remove("hidden","opening");app.classList.remove("ready");setup.classList.remove("show");window.scrollTo(0,0)};
+cardsBtn.onclick=()=>decks.scrollIntoView({behavior:"smooth"});galleryBtn.onclick=()=>document.getElementById("perguntas").scrollIntoView({behavior:"smooth"});diceBtn.onclick=()=>dicePanel.scrollIntoView({behavior:"smooth",block:"center"});
+</script>
+</body></html>
