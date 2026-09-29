@@ -4,145 +4,653 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Travessia do Nilo</title>
-<meta name="theme-color" content="#06131d">
+<meta name="theme-color" content="#8b5b28">
 <style>
 :root{
   --azul:#073a58;
   --azul2:#105b82;
   --ouro:#d4a23c;
   --ouro2:#f1d583;
-  --papiro:#e6c98c;
   --tinta:#211407;
-  --sombra:0 26px 80px rgba(0,0,0,.42);
+  --sombra:0 24px 65px rgba(42,22,8,.38);
   --ease:cubic-bezier(.16,.84,.18,1);
 }
 *{box-sizing:border-box}
-html,body{margin:0;min-height:100%;font-family:Georgia,'Times New Roman',serif;color:#fff;background:#071722;overflow-x:hidden}
-body{background:radial-gradient(circle at 50% 18%,rgba(20,91,129,.28),transparent 38%),linear-gradient(180deg,#081c2a,#061018 72%,#040b10)}
+html{scroll-behavior:smooth}
+html,body{margin:0;min-height:100%;font-family:Georgia,'Times New Roman',serif}
+body{
+  color:#211407;
+  overflow-x:hidden;
+  background:#a8753d url("assets/img/papiro.png") center top/cover fixed no-repeat;
+}
 button{font:inherit}
-body:before{content:"";position:fixed;inset:0;z-index:-4;background:linear-gradient(rgba(6,19,30,.38),rgba(6,19,30,.74)),repeating-linear-gradient(0deg,#d9b879 0 2px,#e4c88d 2px 7px,#d0ab66 7px 10px);filter:saturate(.94)}
-body:after{content:"𓂀 𓁹 𓆣 𓇯 𓋹 𓎛 𓄿 𓅓 𓆓 𓇌 𓂋";position:fixed;inset:-10%;z-index:-3;pointer-events:none;color:#4b2b111b;font-size:72px;line-height:1.75;letter-spacing:.38em;transform:rotate(-4deg)}
-#grain{position:fixed;inset:0;z-index:-2;opacity:.18;pointer-events:none;background-image:radial-gradient(circle,rgba(255,255,255,.35) 0 1px,transparent 1px);background-size:5px 5px;mix-blend-mode:soft-light}
+button:focus-visible{outline:3px solid #0c577a;outline-offset:4px}
 
-#intro{position:fixed;inset:0;z-index:50;overflow:hidden;display:grid;place-items:center;background:radial-gradient(circle at 50% 45%,rgba(246,216,148,.20),transparent 36%),linear-gradient(rgba(8,16,25,.10),rgba(8,16,25,.46)),repeating-linear-gradient(0deg,#d9b879 0 2px,#e4c88d 2px 7px,#d0ab66 7px 10px)}
-#intro.hidden{opacity:0;visibility:hidden;pointer-events:none;transition:opacity 900ms var(--ease),visibility 900ms var(--ease)}
-.intro-center{position:relative;z-index:10;width:min(760px,88vw);padding:46px 22px 54px;text-align:center;background:radial-gradient(ellipse at center,rgba(54,31,12,.24),transparent 66%);transform:translateY(0);transition:transform 950ms var(--ease),opacity 950ms var(--ease)}
-#intro.opening .intro-center{transform:translateY(-16px) scale(.985);opacity:.58}
-.eye{font-size:56px;color:var(--ouro2);text-shadow:0 0 20px rgba(242,217,137,.5);animation:eyeFloat 3.8s ease-in-out infinite}
-.intro-title{margin:4px 0 12px;font-size:clamp(44px,8vw,98px);line-height:.94;text-transform:uppercase;letter-spacing:.08em;color:#efd487;text-shadow:0 5px 0 #704815,0 18px 38px rgba(0,0,0,.58)}
-.intro-sub{margin:0 0 28px;color:#fff0bf;text-transform:uppercase;letter-spacing:.24em;font-size:clamp(12px,1.5vw,16px)}
-.enter{border:1px solid #e0b353;border-radius:999px;padding:15px 36px;background:linear-gradient(#ffe49b,#d5a03b 55%,#b57921);color:#211407;font-weight:900;letter-spacing:.08em;cursor:pointer;box-shadow:0 16px 38px rgba(0,0,0,.36),inset 0 1px rgba(255,255,255,.50);transition:transform 380ms var(--ease),filter 380ms var(--ease),box-shadow 380ms var(--ease)}
-.enter:hover{filter:brightness(1.06);transform:translateY(-3px);box-shadow:0 22px 48px rgba(0,0,0,.42),inset 0 1px rgba(255,255,255,.55)}
-.enter:active{transform:translateY(0) scale(.985)}
+body:before{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:-2;
+  pointer-events:none;
+  background:linear-gradient(rgba(255,229,172,.08),rgba(71,36,12,.12));
+}
+#grain{
+  position:fixed;
+  inset:0;
+  z-index:100;
+  opacity:.10;
+  pointer-events:none;
+  background-image:radial-gradient(circle,rgba(255,255,255,.75) 0 1px,transparent 1px);
+  background-size:5px 5px;
+  mix-blend-mode:soft-light;
+}
 
-.side{position:absolute;top:0;bottom:0;width:min(31vw,440px);z-index:5;pointer-events:none}.side.left{left:0}.side.right{right:0}
-.fan{position:absolute;top:50%;width:min(29vw,420px);height:min(78vh,700px);filter:drop-shadow(0 22px 30px rgba(0,0,0,.42));will-change:transform,opacity}.left .fan{left:-16%;transform:translateY(-50%) rotate(-1deg)}.right .fan{right:-16%;transform:translateY(-50%) scaleX(-1) rotate(-1deg)}
-.fan:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 82% 50%,rgba(255,239,184,.60),transparent 15%),repeating-conic-gradient(from 112deg at 86% 82%,#8a5722 0 7deg,#d7af55 7deg 13deg,#0d5273 13deg 18deg,#7b4227 18deg 24deg,#d7af55 24deg 30deg);clip-path:polygon(0 7%,100% 50%,0 94%);border-radius:36px;animation:fanBreath 5.2s ease-in-out infinite}
-.fan:after{content:"";position:absolute;left:12%;bottom:2%;width:16px;height:38%;border-radius:999px;background:linear-gradient(#6d4319,#2d1b0e)}
-.ramo{position:absolute;width:190px;height:270px;filter:drop-shadow(0 12px 14px rgba(0,0,0,.24));will-change:transform,opacity;animation:branchBreath 6.5s ease-in-out infinite}.ramo:before{content:"";position:absolute;left:50%;bottom:0;width:9px;height:100%;border-radius:999px;background:linear-gradient(#7b4d20,#392311)}.leaf{position:absolute;left:50%;width:56%;height:11%;background:linear-gradient(90deg,#88ac68,#567f3d 58%,#2d4d20);clip-path:polygon(0 50%,18% 22%,62% 0,100% 45%,60% 100%,18% 78%);transform-origin:left center}.leaf:nth-child(1){top:8%;transform:translateX(-8%) rotate(-28deg)}.leaf:nth-child(2){top:16%;transform:translateX(-92%) rotate(24deg)}.leaf:nth-child(3){top:28%;transform:translateX(-8%) rotate(-22deg)}.leaf:nth-child(4){top:38%;transform:translateX(-92%) rotate(18deg)}.leaf:nth-child(5){top:51%;transform:translateX(-8%) rotate(-18deg)}.leaf:nth-child(6){top:62%;transform:translateX(-92%) rotate(14deg)}
-.r1{top:4%;left:2%;animation-delay:-.2s}.r2{top:32%;left:12%;transform:scale(.82) rotate(-5deg);animation-delay:-1.1s}.r3{bottom:4%;left:4%;transform:scale(.96);animation-delay:-2s}.r4{bottom:20%;left:22%;transform:scale(.64) rotate(12deg);animation-delay:-2.8s}.right .r1{left:auto;right:2%;transform:scaleX(-1)}.right .r2{left:auto;right:12%;transform:scaleX(-1) scale(.82) rotate(-5deg)}.right .r3{left:auto;right:4%;transform:scaleX(-1) scale(.96)}.right .r4{left:auto;right:22%;transform:scaleX(-1) scale(.64) rotate(12deg)}
-#sandCanvas{position:fixed;inset:0;z-index:80;width:100vw;height:100vh;pointer-events:none;opacity:0;transition:opacity 420ms linear;mix-blend-mode:screen}#sandCanvas.active{opacity:1}
+/* TELA INICIAL */
+#intro{
+  position:fixed;
+  inset:0;
+  z-index:50;
+  overflow:hidden;
+  display:grid;
+  place-items:center;
+  background:
+    radial-gradient(circle at 50% 42%,rgba(255,239,191,.26),transparent 42%),
+    linear-gradient(rgba(74,39,14,.08),rgba(74,39,14,.17)),
+    url("assets/img/papiro.png") center/cover no-repeat;
+  transition:opacity 900ms var(--ease),visibility 900ms var(--ease);
+}
+#intro.hidden{opacity:0;visibility:hidden;pointer-events:none}
+.intro-center{
+  position:relative;
+  z-index:12;
+  width:min(760px,86vw);
+  padding:46px 22px 54px;
+  text-align:center;
+  background:radial-gradient(ellipse at center,rgba(255,229,159,.32),transparent 67%);
+  transition:transform 1200ms var(--ease),opacity 900ms var(--ease);
+}
+#intro.opening .intro-center{transform:translateY(-18px) scale(.985);opacity:.45}
+.eye{
+  font-size:58px;
+  color:#073a58;
+  text-shadow:0 2px 0 rgba(255,220,129,.7),0 10px 26px rgba(67,36,12,.28);
+  animation:eyeFloat 3.8s ease-in-out infinite;
+}
+.intro-title{
+  margin:4px 0 12px;
+  font-size:clamp(42px,8vw,96px);
+  line-height:.94;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+  color:#073a58;
+  text-shadow:0 3px 0 #d39b36,0 12px 28px rgba(67,36,12,.24);
+}
+.intro-sub{
+  margin:0 0 28px;
+  color:#4b2c12;
+  text-transform:uppercase;
+  letter-spacing:.22em;
+  font-size:clamp(11px,1.5vw,16px);
+  font-weight:700;
+}
+.enter{
+  border:2px solid #80501c;
+  border-radius:999px;
+  padding:15px 36px;
+  background:linear-gradient(#ffe3a0,#dda73e 56%,#b97b24);
+  color:#211407;
+  font-weight:900;
+  letter-spacing:.08em;
+  cursor:pointer;
+  box-shadow:0 15px 35px rgba(64,35,13,.28),inset 0 1px rgba(255,255,255,.62);
+  transition:transform 320ms var(--ease),filter 320ms var(--ease);
+}
+.enter:hover{filter:brightness(1.06);transform:translateY(-3px)}
+.enter:active{transform:scale(.985)}
+
+/* LEQUES REAIS */
+.intro-fan{
+  position:absolute;
+  top:52%;
+  width:min(35vw,540px);
+  height:auto;
+  z-index:7;
+  filter:drop-shadow(0 22px 26px rgba(56,27,8,.34));
+  will-change:transform,opacity;
+}
+.intro-fan.left{
+  left:-9vw;
+  transform:translateY(-50%) rotate(12deg);
+}
+.intro-fan.right{
+  right:-9vw;
+  transform:translateY(-50%) scaleX(-1) rotate(12deg);
+}
+#intro.opening .intro-fan.left{animation:fanUpLeft 1900ms var(--ease) forwards}
+#intro.opening .intro-fan.right{animation:fanUpRight 1900ms var(--ease) forwards}
+
+/* VÁRIOS RAMOS NAS LATERAIS */
+.branch-strip{
+  position:absolute;
+  left:-4vw;
+  width:108vw;
+  height:auto;
+  z-index:6;
+  pointer-events:none;
+  filter:drop-shadow(0 12px 15px rgba(48,24,7,.22));
+  will-change:transform,opacity;
+}
+.branch-strip.b1{bottom:-21vh;transform:scale(1.02)}
+.branch-strip.b2{bottom:12vh;transform:scale(.78);opacity:.86}
+.branch-strip.b3{bottom:42vh;transform:scale(.60);opacity:.72}
+#intro.opening .branch-strip.b1{animation:branchUp 1750ms var(--ease) .04s forwards}
+#intro.opening .branch-strip.b2{animation:branchUp 1900ms var(--ease) .10s forwards}
+#intro.opening .branch-strip.b3{animation:branchUp 2050ms var(--ease) .16s forwards}
+
+@keyframes fanUpLeft{
+  0%{transform:translateY(-50%) rotate(12deg);opacity:1}
+  100%{transform:translate(-4vw,-150vh) rotate(-5deg);opacity:0}
+}
+@keyframes fanUpRight{
+  0%{transform:translateY(-50%) scaleX(-1) rotate(12deg);opacity:1}
+  100%{transform:translate(4vw,-150vh) scaleX(-1) rotate(-5deg);opacity:0}
+}
+@keyframes branchUp{
+  0%{translate:0 0;opacity:inherit}
+  100%{translate:0 -150vh;opacity:0}
+}
 @keyframes eyeFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
-@keyframes fanBreath{0%,100%{filter:saturate(1) brightness(1)}50%{filter:saturate(1.08) brightness(1.08)}}
-@keyframes branchBreath{0%,100%{filter:drop-shadow(0 12px 14px rgba(0,0,0,.24))}50%{filter:drop-shadow(0 18px 18px rgba(0,0,0,.25)) brightness(1.06)}}
-#intro.opening .left .fan{animation:fanL 2100ms var(--ease) forwards}#intro.opening .right .fan{animation:fanR 2100ms var(--ease) forwards}#intro.opening .r1{animation:ramoOut 1600ms var(--ease) .06s forwards}#intro.opening .r2{animation:ramoOut 1750ms var(--ease) .14s forwards}#intro.opening .r3{animation:ramoOut 1900ms var(--ease) .20s forwards}#intro.opening .r4{animation:ramoOut 2050ms var(--ease) .28s forwards}
-@keyframes fanL{0%{transform:translateY(-50%) rotate(-1deg);opacity:1}34%{transform:translate(5vw,-50%) rotate(1deg);opacity:1}72%{transform:translate(23vw,-50%) rotate(5deg);opacity:.86}100%{transform:translate(48vw,-50%) rotate(10deg);opacity:0}}
-@keyframes fanR{0%{transform:translateY(-50%) scaleX(-1) rotate(-1deg);opacity:1}34%{transform:translate(-5vw,-50%) scaleX(-1) rotate(1deg);opacity:1}72%{transform:translate(-23vw,-50%) scaleX(-1) rotate(5deg);opacity:.86}100%{transform:translate(-48vw,-50%) scaleX(-1) rotate(10deg);opacity:0}}
-@keyframes ramoOut{0%{opacity:1}42%{opacity:.96}100%{transform:translateY(-12vh) scale(.82) rotate(7deg);opacity:0}}
-@media(max-width:900px){.side{display:none}.intro-title{font-size:clamp(38px,12vw,78px)}}
 
-#app{min-height:100vh;opacity:0;transform:translateY(10px) scale(.99);transition:opacity 1050ms var(--ease),transform 1050ms var(--ease)}#app.ready{opacity:1;transform:none}
-.top{position:sticky;top:0;z-index:20;display:flex;justify-content:space-between;gap:12px;align-items:center;padding:14px 4vw;background:linear-gradient(180deg,rgba(8,36,55,.96),rgba(8,27,42,.92));border-bottom:1px solid rgba(211,164,58,.44);box-shadow:0 8px 22px rgba(0,0,0,.20);backdrop-filter:blur(12px)}
-.brand{display:flex;align-items:center;gap:12px}.brand strong{display:block;color:var(--ouro2);letter-spacing:.08em;text-transform:uppercase}.brand small{display:block;color:#d8e3e9}.chips{display:flex;gap:8px;flex-wrap:wrap}.chip{border:1px solid rgba(240,217,137,.42);background:linear-gradient(180deg,rgba(17,75,108,.92),rgba(8,39,59,.96));color:#fff;border-radius:999px;padding:8px 12px;cursor:pointer;transition:transform 260ms var(--ease),filter 260ms var(--ease)}.chip:hover{transform:translateY(-2px);filter:brightness(1.08)}
-.layout{max-width:1240px;margin:auto;padding:34px 4vw 22px}.hero{display:grid;grid-template-columns:1.15fr .85fr;gap:24px}@media(max-width:980px){.hero{grid-template-columns:1fr}}
-.papiro{position:relative;color:var(--tinta);background:linear-gradient(rgba(243,226,184,.95),rgba(225,199,138,.96)),repeating-linear-gradient(0deg,#d9b879 0 2px,#e4c88d 2px 7px,#d1ad68 7px 10px);border-radius:24px;padding:32px;box-shadow:var(--sombra),inset 0 0 0 2px rgba(241,215,139,.38);border:1px solid rgba(116,72,18,.56)}.papiro h1{margin:0 0 10px;color:#12364e;font-size:clamp(30px,4vw,52px)}.papiro p{margin:0;font-family:system-ui,sans-serif;line-height:1.6}.panel{position:relative;background:linear-gradient(180deg,rgba(8,43,66,.96),rgba(8,31,49,.92));border:1px solid rgba(240,217,137,.34);border-radius:22px;padding:24px;box-shadow:var(--sombra)}.panel h2,.panel h3,.section h2{margin-top:0;color:var(--ouro2)}.row{display:flex;justify-content:space-between;gap:12px;border-bottom:1px solid rgba(255,255,255,.10);padding:10px 0}.row:last-child{border-bottom:none}.row span{color:#c0d2dc}.section{margin:32px 0 16px}.section h2{display:flex;align-items:center;gap:12px;margin-bottom:6px}.section h2:before,.section h2:after{content:"";height:2px;flex:1;background:linear-gradient(90deg,transparent,rgba(211,164,58,.75),transparent)}.section p{margin:0;color:#d4e2e8;font-family:system-ui,sans-serif}
-.decks{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}@media(max-width:980px){.decks{grid-template-columns:1fr}}.deck{min-height:430px;position:relative;cursor:pointer;border:0;background:transparent;padding:0;text-align:inherit;perspective:1200px}.stack{position:absolute;inset:16px 16px 52px;filter:drop-shadow(0 24px 34px rgba(0,0,0,.38));transform-style:preserve-3d;transition:transform 520ms var(--ease)}.stack-card{position:absolute;inset:0;border-radius:20px;overflow:hidden;box-shadow:0 8px 18px rgba(0,0,0,.30);background:linear-gradient(135deg,#0c4163,#0d2d46 42%,#d4a23c 43%,#eacb73 46%,#0c4163 47%);border:6px solid #d4a23c;transition:transform 560ms var(--ease),filter 560ms var(--ease)}.stack-card:nth-child(1){transform:translate3d(12px,14px,-26px) rotate(3deg)}.stack-card:nth-child(2){transform:translate3d(6px,7px,-12px) rotate(-2deg)}.stack-card:nth-child(3){transform:translate3d(0,0,0) rotate(.4deg)}.stack-card:before{content:"TRAVESSIA DO NILO";position:absolute;inset:24px;border:2px solid #e9cc7a;border-radius:14px;display:grid;place-items:center;text-align:center;color:#f5e8bf;font-weight:900;letter-spacing:.08em}.stack-card:after{content:attr(data-kind);position:absolute;left:20px;right:20px;bottom:22px;text-align:center;background:#e8cf95;color:#24170b;padding:8px;border-radius:10px;font-weight:900}.deck-title{position:absolute;left:26px;right:26px;bottom:8px;text-align:center;background:linear-gradient(180deg,rgba(11,50,74,.96),rgba(7,29,45,.96));border:1px solid rgba(240,217,137,.38);border-radius:999px;padding:10px 12px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:#fff;transition:transform 460ms var(--ease),filter 460ms var(--ease)}.deck:hover .stack{transform:translateY(-8px) rotateX(5deg) rotateY(-3deg)}.deck:hover .stack-card:nth-child(1){transform:translate3d(18px,20px,-26px) rotate(5deg)}.deck:hover .stack-card:nth-child(2){transform:translate3d(8px,10px,-12px) rotate(-3deg)}.deck:hover .stack-card:nth-child(3){transform:translate3d(0,-12px,16px) rotate(.7deg);filter:brightness(1.06)}.deck:hover .deck-title{transform:translateY(-3px);filter:brightness(1.1)}
-.table{position:relative;margin-top:8px;padding:24px;border-radius:28px;background:radial-gradient(circle at 50% 22%,rgba(241,213,131,.16),transparent 35%),linear-gradient(180deg,rgba(8,32,49,.45),rgba(8,32,49,.18))}
-.drawn{position:fixed;inset:0;z-index:70;display:none;place-items:center;background:rgba(0,0,0,.60);backdrop-filter:blur(8px);padding:22px}.drawn.show{display:grid}.card{width:min(430px,88vw);aspect-ratio:337/463;perspective:1300px}.card-inner{position:relative;width:100%;height:100%;transform-style:preserve-3d;animation:reveal 1280ms var(--ease) forwards}.face{position:absolute;inset:0;border-radius:20px;overflow:hidden;backface-visibility:hidden;box-shadow:0 30px 80px rgba(0,0,0,.58);background:#123a56;border:8px solid #d4a23c}.front{transform:rotateY(180deg);background:linear-gradient(#ead9a9,#d7bb7f);color:#24170b;padding:34px 26px;text-align:center}.front h3{margin:0 0 12px;color:#12364e;font-size:26px}.front p{font-family:system-ui,sans-serif;font-size:18px;line-height:1.35}.back:before{content:"TRAVESSIA DO NILO";position:absolute;inset:28px;border:2px solid #e9cc7a;border-radius:14px;display:grid;place-items:center;text-align:center;color:#f5e8bf;font-weight:900;letter-spacing:.1em}.back:after{content:"𓂀";position:absolute;inset:auto 0 50px;text-align:center;font-size:60px;color:#e9cc7a}@keyframes reveal{0%{transform:translate3d(0,80px,0) scale(.74) rotateY(0deg) rotateZ(-4deg);filter:blur(.5px)}36%{transform:translate3d(0,-6px,0) scale(1.02) rotateY(0deg) rotateZ(1deg);filter:none}58%{transform:translate3d(0,0,0) scale(1) rotateY(0deg) rotateZ(0)}100%{transform:translate3d(0,0,0) scale(1) rotateY(180deg) rotateZ(0)}}.actions{margin-top:18px;display:flex;gap:10px;justify-content:center}.actions button{border:0;border-radius:999px;padding:11px 16px;font-weight:900;cursor:pointer;transition:transform 260ms var(--ease),filter 260ms var(--ease)}.actions button:hover{transform:translateY(-2px);filter:brightness(1.08)}.gold{background:linear-gradient(#f2d989,#c9942e);color:#21140a}.blue{background:#103f61;color:#fff}
-.gallery{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}@media(max-width:1100px){.gallery{grid-template-columns:repeat(3,1fr)}}@media(max-width:760px){.gallery{grid-template-columns:1fr 1fr}}.mini{position:relative;min-height:210px;padding:16px;border-radius:18px;background:linear-gradient(180deg,#ead9a9,#ceb070);color:#211407;border:4px solid #d4a23c;box-shadow:0 14px 32px rgba(0,0,0,.28);font-family:system-ui,sans-serif;display:flex;align-items:center;justify-content:center;text-align:center;font-weight:800;transition:transform 420ms var(--ease),filter 420ms var(--ease)}.mini:hover{transform:translateY(-7px) rotate(.6deg);filter:brightness(1.03)}.mini:before{content:"";position:absolute;inset:9px;border:1px solid rgba(35,20,8,.34);border-radius:12px}.mini span{position:relative;z-index:2}.dice-area{display:flex;gap:18px;align-items:center;flex-wrap:wrap}.dice{width:92px;height:92px;border-radius:18px;background:linear-gradient(#f8eecf,#d0ac63);color:#24170b;display:grid;place-items:center;font-size:46px;font-weight:900;box-shadow:var(--sombra);transition:transform 700ms var(--ease)}.dice.roll{animation:roll 850ms var(--ease)}@keyframes roll{0%{transform:rotate(0) scale(1)}35%{transform:rotate(190deg) scale(1.12)}70%{transform:rotate(330deg) scale(.96)}100%{transform:rotate(360deg) scale(1)}}.footer{padding:26px 4vw 38px;text-align:center;color:#b7ccd7;font-family:system-ui,sans-serif}
-@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.001ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.001ms!important}}
+/* MENU */
+#app{
+  min-height:100vh;
+  opacity:0;
+  transform:translateY(10px) scale(.992);
+  transition:opacity 1050ms var(--ease),transform 1050ms var(--ease);
+}
+#app.ready{opacity:1;transform:none}
+
+.top{
+  position:sticky;
+  top:0;
+  z-index:20;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:14px;
+  padding:13px 4vw;
+  background:linear-gradient(180deg,rgba(7,58,88,.96),rgba(6,39,59,.95));
+  color:#fff;
+  border-bottom:2px solid rgba(212,162,60,.82);
+  box-shadow:0 8px 22px rgba(52,27,8,.22);
+  backdrop-filter:blur(10px);
+}
+.brand{display:flex;align-items:center;gap:12px}
+.brand>span{font-size:28px;color:var(--ouro2)}
+.brand strong{display:block;color:var(--ouro2);letter-spacing:.08em;text-transform:uppercase}
+.brand small{display:block;color:#e8e1d1}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{
+  border:1px solid rgba(240,217,137,.52);
+  background:linear-gradient(180deg,rgba(17,75,108,.92),rgba(8,39,59,.96));
+  color:#fff;
+  border-radius:999px;
+  padding:8px 12px;
+  cursor:pointer;
+  transition:transform 240ms var(--ease),filter 240ms var(--ease);
+}
+.chip:hover{transform:translateY(-2px);filter:brightness(1.09)}
+
+.layout{
+  max-width:1240px;
+  margin:auto;
+  padding:34px 4vw 26px;
+}
+.hero{display:grid;grid-template-columns:1.15fr .85fr;gap:24px}
+.papiro-card,.panel,.table{
+  border:2px solid rgba(105,61,19,.55);
+  box-shadow:var(--sombra);
+}
+.papiro-card{
+  position:relative;
+  overflow:hidden;
+  color:var(--tinta);
+  background:
+    linear-gradient(rgba(255,239,198,.73),rgba(222,188,122,.70)),
+    url("assets/img/papiro.png") center/cover no-repeat;
+  border-radius:22px;
+  padding:32px;
+}
+.papiro-card:after{
+  content:"𓂀  𓋹  𓆣";
+  position:absolute;
+  right:24px;
+  bottom:14px;
+  color:rgba(75,43,17,.18);
+  font-size:32px;
+  letter-spacing:.3em;
+}
+.papiro-card h1{position:relative;margin:0 0 10px;color:#073a58;font-size:clamp(30px,4vw,50px);z-index:1}
+.papiro-card p{position:relative;margin:0;font-family:system-ui,sans-serif;line-height:1.65;z-index:1}
+.panel{
+  position:relative;
+  color:#fff;
+  background:linear-gradient(180deg,rgba(8,52,78,.96),rgba(7,34,50,.96));
+  border-color:rgba(218,174,76,.68);
+  border-radius:22px;
+  padding:24px;
+}
+.panel h2,.panel h3,.section h2{margin-top:0;color:#f0d886}
+.row{display:flex;justify-content:space-between;gap:12px;border-bottom:1px solid rgba(255,255,255,.11);padding:10px 0}
+.row:last-child{border-bottom:none}
+.row span{color:#d8e3e9;text-align:right}
+.section{margin:34px 0 16px}
+.section h2{display:flex;align-items:center;gap:12px;margin-bottom:6px;color:#073a58;text-shadow:0 1px #f2d98e}
+.section h2:before,.section h2:after{
+  content:"";
+  height:2px;
+  flex:1;
+  background:linear-gradient(90deg,transparent,rgba(7,58,88,.7),transparent);
+}
+.section p{margin:0;color:#3d2916;font-family:system-ui,sans-serif;font-weight:600}
+
+.table{
+  position:relative;
+  margin-top:8px;
+  padding:24px;
+  border-radius:28px;
+  background:
+    linear-gradient(rgba(246,218,157,.60),rgba(208,166,92,.57)),
+    url("assets/img/papiro.png") center/cover no-repeat;
+}
+
+/* BARALHOS: imagens reais */
+.decks{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.deck{
+  min-height:490px;
+  position:relative;
+  cursor:pointer;
+  border:0;
+  background:transparent;
+  padding:0;
+  perspective:1200px;
+}
+.stack{
+  position:absolute;
+  inset:14px 18px 60px;
+  transform-style:preserve-3d;
+  filter:drop-shadow(0 19px 24px rgba(42,21,7,.34));
+  transition:transform 480ms var(--ease);
+}
+.stack-card{
+  position:absolute;
+  inset:0;
+  overflow:hidden;
+  border-radius:8px;
+  background-image:var(--deck-cover);
+  background-position:center;
+  background-size:cover;
+  background-repeat:no-repeat;
+  box-shadow:0 5px 13px rgba(0,0,0,.28);
+  transition:transform 520ms var(--ease),filter 520ms var(--ease);
+}
+.stack-card:nth-child(1){transform:translate3d(12px,14px,-26px) rotate(3deg)}
+.stack-card:nth-child(2){transform:translate3d(6px,7px,-12px) rotate(-2deg)}
+.stack-card:nth-child(3){transform:translate3d(0,0,0) rotate(.35deg)}
+.deck-title{
+  position:absolute;
+  left:24px;
+  right:24px;
+  bottom:6px;
+  text-align:center;
+  color:#fff;
+  background:linear-gradient(180deg,#0e5276,#072f49);
+  border:2px solid #d6a23c;
+  border-radius:999px;
+  padding:10px 12px;
+  font-weight:900;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  box-shadow:0 8px 18px rgba(43,23,9,.20);
+}
+.deck:hover .stack{transform:translateY(-8px) rotateX(5deg) rotateY(-3deg)}
+.deck:hover .stack-card:nth-child(1){transform:translate3d(18px,20px,-26px) rotate(5deg)}
+.deck:hover .stack-card:nth-child(2){transform:translate3d(8px,10px,-12px) rotate(-3deg)}
+.deck:hover .stack-card:nth-child(3){transform:translate3d(0,-12px,16px) rotate(.7deg);filter:brightness(1.04)}
+
+/* CARTA SORTEADA */
+.drawn{
+  position:fixed;
+  inset:0;
+  z-index:70;
+  display:none;
+  place-items:center;
+  padding:20px;
+  background:rgba(31,18,7,.70);
+  backdrop-filter:blur(7px);
+}
+.drawn.show{display:grid}
+.card{
+  width:min(390px,86vw);
+  aspect-ratio:337/463;
+  perspective:1400px;
+}
+.card-inner{position:relative;width:100%;height:100%;transform-style:preserve-3d}
+.card-inner.animate{animation:reveal 1180ms var(--ease) forwards}
+.face{
+  position:absolute;
+  inset:0;
+  border-radius:8px;
+  overflow:hidden;
+  backface-visibility:hidden;
+  box-shadow:0 30px 80px rgba(0,0,0,.58);
+  background-position:center;
+  background-size:100% 100%;
+  background-repeat:no-repeat;
+}
+.front{transform:rotateY(180deg)}
+.back{transform:rotateY(0)}
+@keyframes reveal{
+  0%{transform:translate3d(0,80px,0) scale(.76) rotateY(0deg) rotateZ(-4deg)}
+  34%{transform:translate3d(0,-8px,0) scale(1.025) rotateY(0deg) rotateZ(1deg)}
+  58%{transform:translate3d(0,0,0) scale(1) rotateY(0deg) rotateZ(0)}
+  100%{transform:translate3d(0,0,0) scale(1) rotateY(180deg) rotateZ(0)}
+}
+.actions{margin-top:16px;display:flex;gap:10px;justify-content:center}
+.actions button,.gold,.blue{
+  border:0;
+  border-radius:999px;
+  padding:11px 16px;
+  font-weight:900;
+  cursor:pointer;
+  transition:transform 240ms var(--ease),filter 240ms var(--ease);
+}
+.actions button:hover,.gold:hover,.blue:hover{transform:translateY(-2px);filter:brightness(1.08)}
+.gold{background:linear-gradient(#f2d989,#c9942e);color:#21140a;border:1px solid #704414}
+.blue{background:#103f61;color:#fff;border:1px solid #d1a84e}
+
+/* DADO DE ARGILA */
+.dice-area{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.dice{
+  position:relative;
+  width:104px;
+  height:104px;
+  flex:0 0 auto;
+  border-radius:21px 24px 19px 23px;
+  transform:rotate(4deg);
+  background:
+    radial-gradient(circle at 30% 22%,rgba(255,230,177,.38),transparent 22%),
+    radial-gradient(circle at 76% 75%,rgba(74,37,12,.28),transparent 32%),
+    linear-gradient(145deg,#c58b4e,#a76532 58%,#875127);
+  border:3px solid #70401c;
+  box-shadow:
+    0 18px 35px rgba(53,27,9,.35),
+    inset 5px 5px 12px rgba(255,222,165,.20),
+    inset -8px -10px 15px rgba(72,34,11,.30);
+}
+.dice:before{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:inherit;
+  pointer-events:none;
+  opacity:.75;
+  background:
+    linear-gradient(22deg,transparent 30%,rgba(85,45,20,.20) 31%,transparent 33%),
+    linear-gradient(112deg,transparent 69%,rgba(255,214,152,.12) 70%,transparent 72%),
+    radial-gradient(circle at 17% 63%,rgba(69,34,13,.24) 0 2px,transparent 3px),
+    radial-gradient(circle at 73% 29%,rgba(69,34,13,.18) 0 2px,transparent 3px);
+}
+.pip{
+  position:absolute;
+  width:14px;
+  height:14px;
+  border-radius:50%;
+  opacity:0;
+  background:radial-gradient(circle at 36% 32%,#6c421f,#3e210e 72%);
+  box-shadow:inset 1px 1px 2px rgba(255,215,153,.20);
+  transition:opacity 120ms ease;
+}
+.pip.show{opacity:1}
+.tl{top:18px;left:18px}.tr{top:18px;right:18px}
+.ml{top:45px;left:18px}.c{top:45px;left:45px}.mr{top:45px;right:18px}
+.bl{bottom:18px;left:18px}.br{bottom:18px;right:18px}
+.dice.roll{animation:roll 850ms var(--ease)}
+@keyframes roll{
+  0%{transform:rotate(4deg) scale(1)}
+  35%{transform:rotate(188deg) scale(1.10)}
+  70%{transform:rotate(326deg) scale(.96)}
+  100%{transform:rotate(364deg) scale(1)}
+}
+#diceText{color:#fff0bd;font-family:system-ui,sans-serif;font-weight:800}
+.footer{padding:26px 4vw 38px;text-align:center;color:#4a2e16;font-family:system-ui,sans-serif;font-weight:700}
+
+@media(max-width:980px){
+  .hero{grid-template-columns:1fr}
+  .decks{grid-template-columns:1fr}
+  .deck{min-height:560px}
+}
+@media(max-width:700px){
+  .top{align-items:flex-start;flex-direction:column}
+  .intro-fan{width:56vw}
+  .intro-fan.left{left:-24vw}
+  .intro-fan.right{right:-24vw}
+  .branch-strip{left:-26vw;width:152vw}
+  .branch-strip.b2{opacity:.64}
+  .branch-strip.b3{opacity:.45}
+  .deck{min-height:470px}
+  .table{padding:14px}
+}
+@media(max-width:450px){
+  .layout{padding-left:14px;padding-right:14px}
+  .papiro-card,.panel{padding:21px}
+  .deck{min-height:420px}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*:before,*:after{animation-duration:.001ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.001ms!important}
+}
 </style>
 </head>
 <body>
 <div id="grain"></div>
-<canvas id="sandCanvas"></canvas>
+
 <section id="intro" aria-label="Entrada do jogo">
-  <div class="side left"><div class="fan"></div><div class="ramo r1"><i class="leaf"></i><i class="leaf"></i><i class="leaf"></i><i class="leaf"></i><i class="leaf"></i><i class="leaf"></i></div><div class="ramo r2"><i class="leaf"></i><i class="leaf"></i><i class="leaf"></i><i class="leaf"></i><i class="leaf"></i><i class="leaf"></i></div><div class="ramo r3"><i class="leaf"></i><i class="leaf"></i><i class="leaf"></i><i class="leaf"></i><i class="leaf"></i><i class="leaf"></i></div><div class="ramo r4"><i class="leaf"></i><i class="leaf"></i><i class="leaf"></i><i class="leaf"></i><i class="leaf"></i><i class="leaf"></i></div></div>
-  <div class="intro-center"><div class="eye">𓂀</div><h1 class="intro-title">Travessia<br>do Nilo</h1><p class="intro-sub">Cartas, desafios e estratégia no Egito</p><button id="enter" class="enter">ENTRAR NO TEMPLO</button></div>
-  <div class="side right"><div class="fan"></div><div class="ramo r1"><i class="leaf"></i><i class="leaf"></i><i class="leaf"></i><i class="leaf"></i><i class="leaf"></i><i class="leaf"></i></div><div class="ramo r2"><i class="leaf"></i><i class="leaf"></i><i class="leaf"></i><i class="leaf"></i><i class="leaf"></i><i class="leaf"></i></div><div class="ramo r3"><i class="leaf"></i><i class="leaf"></i><i class="leaf"></i><i class="leaf"></i><i class="leaf"></i><i class="leaf"></i></div><div class="ramo r4"><i class="leaf"></i><i class="leaf"></i><i class="leaf"></i><i class="leaf"></i><i class="leaf"></i><i class="leaf"></i></div></div>
-</section>
-<main id="app">
-  <header class="top"><div class="brand"><span>𓂀</span><div><strong>Travessia do Nilo</strong><small>Jogo pedagógico de cartas</small></div></div><nav class="chips"><button class="chip" onclick="scrollToId('baralhos')">Baralhos</button><button class="chip" onclick="scrollToId('cartas')">Cartas</button><button class="chip" onclick="scrollToId('dado')">Dado</button></nav></header>
-  <div class="layout">
-    <section class="hero"><article class="papiro"><h1>Entre no templo, atravesse o Nilo e responda aos desafios.</h1><p>Escolha um monte de cartas, compre uma carta e use o dado digital para movimentar a dinâmica. A transição agora usa partículas em Canvas, com vento lateral, profundidade e saída gradual. Porque aparentemente até a areia precisava de direção artística.</p></article><aside class="panel"><h2>Como jogar</h2><div class="row"><b>1.</b><span>Escolha um baralho.</span></div><div class="row"><b>2.</b><span>Leia a carta sorteada.</span></div><div class="row"><b>3.</b><span>Use o dado para definir avanço ou desafio.</span></div><div class="row"><b>4.</b><span>Registre respostas e pontuação.</span></div></aside></section>
-    <section id="baralhos" class="section"><h2>Montes de cartas</h2><p>Clique em um monte. A carta sai da pilha com animação mais longa, mais leve e menos travada.</p></section>
-    <section class="table"><div class="decks"><button class="deck" data-deck="perguntas"><div class="stack"><div class="stack-card" data-kind="PERGUNTAS"></div><div class="stack-card" data-kind="PERGUNTAS"></div><div class="stack-card" data-kind="PERGUNTAS"></div></div><div class="deck-title">Cartas de perguntas</div></button><button class="deck" data-deck="pragas"><div class="stack"><div class="stack-card" data-kind="PRAGAS"></div><div class="stack-card" data-kind="PRAGAS"></div><div class="stack-card" data-kind="PRAGAS"></div></div><div class="deck-title">Cartas das pragas</div></button><button class="deck" data-deck="farao"><div class="stack"><div class="stack-card" data-kind="FARAÓ"></div><div class="stack-card" data-kind="FARAÓ"></div><div class="stack-card" data-kind="FARAÓ"></div></div><div class="deck-title">Cartas do faraó</div></button></div></section>
-    <section id="cartas" class="section"><h2>Cartas de perguntas</h2><p>Modelo visual das cartas para usar durante a atividade.</p></section><section class="gallery" id="gallery"></section>
-    <section id="dado" class="section"><h2>Dado digital</h2><p>Role para movimentar a travessia.</p></section><section class="panel dice-area"><div id="dice" class="dice">1</div><button class="gold" onclick="rollDice()">ROLAR DADO</button><span id="diceText">Resultado: 1</span></section>
+  <img class="branch-strip b3" src="assets/img/ramos.png" alt="">
+  <img class="branch-strip b2" src="assets/img/ramos.png" alt="">
+  <img class="branch-strip b1" src="assets/img/ramos.png" alt="">
+  <img class="intro-fan left" src="assets/img/leque.png" alt="">
+  <img class="intro-fan right" src="assets/img/leque.png" alt="">
+
+  <div class="intro-center">
+    <div class="eye">𓂀</div>
+    <h1 class="intro-title">Travessia<br>do Nilo</h1>
+    <p class="intro-sub">Cartas, desafios e estratégia no Egito</p>
+    <button id="enter" class="enter">ABRIR MENU</button>
   </div>
-  <footer class="footer">Travessia do Nilo • Matemática, estratégia e cartas pedagógicas</footer>
+</section>
+
+<main id="app">
+  <header class="top">
+    <div class="brand">
+      <span>𓂀</span>
+      <div><strong>Travessia do Nilo</strong><small>Jogo pedagógico de cartas</small></div>
+    </div>
+    <nav class="chips">
+      <button class="chip" onclick="scrollToId('baralhos')">Baralhos</button>
+      <button class="chip" onclick="scrollToId('dado')">Dado</button>
+    </nav>
+  </header>
+
+  <div class="layout">
+    <section class="hero">
+      <article class="papiro-card">
+        <h1>Entre no templo e atravesse o Nilo.</h1>
+        <p>Escolha um dos três montes. As cartas são sorteadas aleatoriamente e cada tipo usa exatamente a arte original: Perguntas, Pragas do Egito e Cartas do Faraó.</p>
+      </article>
+      <aside class="panel">
+        <h2>Como jogar</h2>
+        <div class="row"><b>1.</b><span>Escolha um baralho.</span></div>
+        <div class="row"><b>2.</b><span>Compre uma carta aleatória.</span></div>
+        <div class="row"><b>3.</b><span>Leia e execute o que a carta mandar.</span></div>
+        <div class="row"><b>4.</b><span>Role o dado de argila quando necessário.</span></div>
+      </aside>
+    </section>
+
+    <section id="baralhos" class="section">
+      <h2>Montes de cartas</h2>
+      <p>Clique em um monte para sortear. Nenhuma carta se repete até o respectivo baralho acabar; depois ele é embaralhado novamente.</p>
+    </section>
+
+    <section class="table">
+      <div class="decks" id="decks"></div>
+    </section>
+
+    <section id="dado" class="section">
+      <h2>Dado de argila</h2>
+      <p>Role o dado para movimentar a travessia.</p>
+    </section>
+
+    <section class="panel dice-area">
+      <div id="dice" class="dice" aria-label="Dado mostrando 1">
+        <i class="pip tl"></i><i class="pip tr"></i>
+        <i class="pip ml"></i><i class="pip c"></i><i class="pip mr"></i>
+        <i class="pip bl"></i><i class="pip br"></i>
+      </div>
+      <button class="gold" onclick="rollDice()">ROLAR DADO</button>
+      <span id="diceText">Resultado: 1</span>
+    </section>
+  </div>
+
+  <footer class="footer">Travessia do Nilo • Jogo pedagógico</footer>
 </main>
-<div id="drawn" class="drawn"><div><div class="card"><div class="card-inner"><div class="face back"></div><div class="face front"><h3 id="cardTitle"></h3><p id="cardText"></p></div></div></div><div class="actions"><button class="gold" id="again">Comprar outra</button><button class="blue" id="close">Fechar</button></div></div></div>
+
+<div id="drawn" class="drawn" role="dialog" aria-modal="true" aria-label="Carta sorteada">
+  <div>
+    <div class="card">
+      <div id="cardInner" class="card-inner">
+        <div id="cardBack" class="face back"></div>
+        <div id="cardFront" class="face front"></div>
+      </div>
+    </div>
+    <div class="actions">
+      <button class="gold" id="again">Comprar outra</button>
+      <button class="blue" id="close">Fechar</button>
+    </div>
+  </div>
+</div>
+
 <script>
 const $=s=>document.querySelector(s);
-const intro=$('#intro'), app=$('#app'), canvas=$('#sandCanvas'), ctx=canvas.getContext('2d',{alpha:true});
-let W=0,H=0,DPR=1,particles=[],raf=0,stormEnd=0,stormStart=0;
-function resizeCanvas(){DPR=Math.min(devicePixelRatio||1,2);W=innerWidth;H=innerHeight;canvas.width=Math.floor(W*DPR);canvas.height=Math.floor(H*DPR);ctx.setTransform(DPR,0,0,DPR,0,0)}
-addEventListener('resize',resizeCanvas,{passive:true});resizeCanvas();
-function makeParticles(mode='burst'){
-  const count=Math.min(1900,Math.max(850,Math.floor(W*H/780)));
-  particles=Array.from({length:count},(_,i)=>{
-    const layer=Math.random();
-    const fine=Math.random()<.72;
-    return {x:mode==='burst'?-W*.24+Math.random()*W*.35:Math.random()*W,y:Math.random()*H,vx:(2.8+layer*9.5+Math.random()*5.2),vy:-1.2+Math.random()*2.4,size:fine?.45+Math.random()*1.1:1.4+Math.random()*3.1,alpha:fine?.16+Math.random()*.36:.22+Math.random()*.38,spin:Math.random()*6.28,wobble:Math.random()*6.28,layer:layer,hue:36+Math.random()*22};
-  });
-}
-function drawStorm(now){
-  const total=stormEnd-stormStart;
-  const t=Math.min(1,(now-stormStart)/total);
-  const fadeIn=Math.min(1,t/.18);
-  const fadeOut=t>.76?Math.max(0,1-(t-.76)/.24):1;
-  const power=fadeIn*fadeOut;
-  ctx.clearRect(0,0,W,H);
-  ctx.globalCompositeOperation='screen';
-  const wind=1+Math.sin(now/530)*.38;
-  for(const p of particles){
-    p.wobble+=.035+p.layer*.035;
-    p.x+=p.vx*wind*(.7+p.layer*.65);
-    p.y+=p.vy+Math.sin(p.wobble)*(.4+p.layer*1.4);
-    p.spin+=.04+p.layer*.045;
-    if(p.x>W+40){p.x=-80-Math.random()*W*.22;p.y=Math.random()*H}
-    if(p.y<-40)p.y=H+40;if(p.y>H+40)p.y=-40;
-    ctx.save();
-    ctx.globalAlpha=p.alpha*power*(.55+p.layer*.55);
-    ctx.translate(p.x,p.y);ctx.rotate(p.spin);
-    ctx.fillStyle=`hsl(${p.hue},78%,${58+p.layer*17}%)`;
-    ctx.fillRect(-p.size/2,-p.size/2,p.size*(2+p.layer*2.6),p.size);
-    ctx.restore();
+const $$=s=>[...document.querySelectorAll(s)];
+
+const DECKS={
+  perguntas:{
+    label:'Cartas de perguntas',
+    back:'assets/cards/perguntas/verso.png',
+    fronts:Array.from({length:48},(_,i)=>`assets/cards/perguntas/carta-${String(i+1).padStart(2,'0')}.png`)
+  },
+  pragas:{
+    label:'Pragas do Egito',
+    back:'assets/cards/pragas/verso.png',
+    fronts:Array.from({length:8},(_,i)=>`assets/cards/pragas/carta-${String(i+1).padStart(2,'0')}.png`)
+  },
+  farao:{
+    label:'Cartas do Faraó',
+    back:'assets/cards/farao/verso.png',
+    fronts:Array.from({length:8},(_,i)=>`assets/cards/farao/carta-${String(i+1).padStart(2,'0')}.png`)
   }
-  ctx.globalCompositeOperation='source-over';
-  const g=ctx.createLinearGradient(-W*.2,0,W,0);
-  g.addColorStop(0,`rgba(222,170,83,${.00*power})`);g.addColorStop(.45,`rgba(222,170,83,${.18*power})`);g.addColorStop(.78,`rgba(245,213,147,${.13*power})`);g.addColorStop(1,`rgba(255,238,190,${.02*power})`);
-  ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
-  if(now<stormEnd){raf=requestAnimationFrame(drawStorm)}else{canvas.classList.remove('active');ctx.clearRect(0,0,W,H);cancelAnimationFrame(raf)}
-}
-function startStorm(duration=3000){resizeCanvas();makeParticles();stormStart=performance.now();stormEnd=stormStart+duration;canvas.classList.add('active');cancelAnimationFrame(raf);raf=requestAnimationFrame(drawStorm)}
-$('#enter').addEventListener('click',()=>{intro.classList.add('opening');startStorm(3600);setTimeout(()=>{intro.classList.add('hidden');app.classList.add('ready')},2300);setTimeout(()=>startAmbientSand(),3550)});
-function startAmbientSand(){makeParticles('ambient');stormStart=performance.now();stormEnd=stormStart+1800;canvas.classList.add('active');cancelAnimationFrame(raf);raf=requestAnimationFrame(drawStorm)}
-function scrollToId(id){document.getElementById(id).scrollIntoView({behavior:'smooth',block:'start'})}
-const decks={
-  perguntas:[['Pergunta','Explique, com suas palavras, o que é uma travessia segura no jogo e qual estratégia você usaria.'],['Pergunta','Se uma carta manda avançar 3 casas e outra voltar 1, qual é o deslocamento final?'],['Pergunta','Crie uma regra de pontuação para uma equipe que respondeu duas cartas corretamente.'],['Pergunta','Qual decisão seria mais justa: sortear a carta ou escolher a carta? Justifique.'],['Pergunta','Se quatro equipes jogam e cada uma compra duas cartas, quantas cartas foram usadas?'],['Pergunta','Como você conferiria se todos entenderam a regra antes de começar?'],['Pergunta','Dê um exemplo de situação em que seria necessário revisar uma resposta.'],['Pergunta','O que muda no jogo quando uma carta tem consequência positiva e outra negativa?']],
-  pragas:[['Praga do Nilo','Uma tempestade de areia atrasou sua equipe. Volte 2 casas e explique uma estratégia para recuperar o caminho.'],['Praga do Nilo','O barco perdeu estabilidade. Fique uma rodada sem avançar e resolva um desafio da turma.'],['Praga do Nilo','O vento mudou. Troque uma carta com outra equipe. Humanos inventaram trocas até em jogo, impressionante.'],['Praga do Nilo','A água subiu. Responda uma pergunta extra para continuar.']],
-  farao:[['Carta do Faraó','Avance 2 casas se sua equipe justificar a resposta com clareza.'],['Carta do Faraó','Escolha uma equipe para explicar a própria estratégia.'],['Carta do Faraó','Ganhe uma nova chance se corrigir um erro anterior.'],['Carta do Faraó','Proteção do templo: ignore uma penalidade. Use com sabedoria, uma novidade histórica.']]
 };
-function pick(deck){const arr=decks[deck];return arr[Math.floor(Math.random()*arr.length)]}
+
+const bags={};
 let lastDeck='perguntas';
-document.querySelectorAll('.deck').forEach(btn=>btn.addEventListener('click',()=>drawCard(btn.dataset.deck)));
-function drawCard(deck){lastDeck=deck;const [title,text]=pick(deck);$('#cardTitle').textContent=title;$('#cardText').textContent=text;const old=document.querySelector('.card-inner');old.style.animation='none';old.offsetHeight;old.style.animation='reveal 1280ms var(--ease) forwards';$('#drawn').classList.add('show')}
-$('#again').addEventListener('click',()=>drawCard(lastDeck));$('#close').addEventListener('click',()=>$('#drawn').classList.remove('show'));$('#drawn').addEventListener('click',e=>{if(e.target.id==='drawn')$('#drawn').classList.remove('show')});
-const gal=['Explique uma estratégia para atravessar o Nilo.','Calcule o total de casas após avançar 4 e voltar 2.','Crie uma regra justa para desempate.','Qual carta muda mais o jogo? Justifique.','Como saber se uma resposta está completa?','Se 5 equipes compram 3 cartas, quantas cartas saem do monte?','Dê um exemplo de consequência positiva.','Dê um exemplo de consequência negativa.'];
-$('#gallery').innerHTML=gal.map(t=>`<div class="mini"><span>${t}</span></div>`).join('');
-function rollDice(){const v=1+Math.floor(Math.random()*6);const d=$('#dice');d.classList.remove('roll');d.offsetHeight;d.textContent=v;d.classList.add('roll');$('#diceText').textContent='Resultado: '+v}
+
+function shuffle(source){
+  const a=[...source];
+  for(let i=a.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+function nextCard(deck){
+  if(!bags[deck]||bags[deck].length===0) bags[deck]=shuffle(DECKS[deck].fronts);
+  return bags[deck].pop();
+}
+
+function renderDecks(){
+  $('#decks').innerHTML=Object.entries(DECKS).map(([key,deck])=>`
+    <button class="deck" data-deck="${key}" aria-label="Sortear ${deck.label}">
+      <div class="stack" style="--deck-cover:url('${deck.back}')">
+        <div class="stack-card"></div>
+        <div class="stack-card"></div>
+        <div class="stack-card"></div>
+      </div>
+      <div class="deck-title">${deck.label}</div>
+    </button>
+  `).join('');
+  $$('.deck').forEach(btn=>btn.addEventListener('click',()=>drawCard(btn.dataset.deck)));
+}
+
+function drawCard(deck){
+  lastDeck=deck;
+  const front=nextCard(deck);
+  $('#cardBack').style.backgroundImage=`url('${DECKS[deck].back}')`;
+  $('#cardFront').style.backgroundImage=`url('${front}')`;
+
+  const inner=$('#cardInner');
+  inner.classList.remove('animate');
+  void inner.offsetWidth;
+  inner.classList.add('animate');
+  $('#drawn').classList.add('show');
+}
+
+$('#again').addEventListener('click',()=>drawCard(lastDeck));
+$('#close').addEventListener('click',()=>$('#drawn').classList.remove('show'));
+$('#drawn').addEventListener('click',e=>{if(e.target.id==='drawn')$('#drawn').classList.remove('show')});
+addEventListener('keydown',e=>{if(e.key==='Escape')$('#drawn').classList.remove('show')});
+
+function scrollToId(id){document.getElementById(id).scrollIntoView({behavior:'smooth',block:'start'})}
+
+$('#enter').addEventListener('click',()=>{
+  const intro=$('#intro');
+  intro.classList.add('opening');
+  setTimeout(()=>{
+    intro.classList.add('hidden');
+    $('#app').classList.add('ready');
+  },1450);
+});
+
+const diceMap={
+  1:['c'],
+  2:['tl','br'],
+  3:['tl','c','br'],
+  4:['tl','tr','bl','br'],
+  5:['tl','tr','c','bl','br'],
+  6:['tl','tr','ml','mr','bl','br']
+};
+function setDice(v){
+  Object.keys({tl:1,tr:1,ml:1,c:1,mr:1,bl:1,br:1}).forEach(pos=>{
+    $('#dice .'+pos).classList.toggle('show',diceMap[v].includes(pos));
+  });
+  $('#dice').setAttribute('aria-label','Dado mostrando '+v);
+  $('#diceText').textContent='Resultado: '+v;
+}
+function rollDice(){
+  const v=1+Math.floor(Math.random()*6);
+  const d=$('#dice');
+  d.classList.remove('roll');
+  void d.offsetWidth;
+  setDice(v);
+  d.classList.add('roll');
+}
+
+/* pré-carrega as cartas para a animação não mostrar flash */
+Object.values(DECKS).forEach(deck=>{
+  [deck.back,...deck.fronts].forEach(src=>{const img=new Image();img.src=src});
+});
+
+renderDecks();
+setDice(1);
 </script>
 </body>
 </html>
