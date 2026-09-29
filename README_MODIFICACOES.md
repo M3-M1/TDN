@@ -1,17 +1,19 @@
-# TDN — versão modificada
+# TDN — versão com as imagens incluídas
 
-Arquivos prontos para substituir o conteúdo do repositório.
+Esta versão usa os arquivos de imagem reais no site:
 
-## Alterações
-- Papiro enviado como fundo da tela inicial e do menu.
-- Leque real em cada lado da tela inicial.
-- Várias instâncias dos ramos reais nas laterais.
-- Ramos e leques sobem ao clicar em "ABRIR MENU".
-- Cartas recortadas das artes enviadas:
-  - 48 perguntas
-  - 8 pragas
-  - 8 cartas do faraó
-- Sorteio aleatório sem repetição até o baralho acabar.
-- Dado estilizado como argila antiga.
+- `assets/img/papiro.png`
+- `assets/img/leque.png`
+- `assets/img/ramos.png`
+- `assets/cards/perguntas/*`
+- `assets/cards/pragas/*`
+- `assets/cards/farao/*`
 
-Mantenha `index.html` e a pasta `assets/` na raiz do GitHub Pages.
+As cartas dos três montes aparecem como `<img>` reais, e a carta sorteada também é exibida pela própria imagem recortada.
+
+## Para publicar
+Envie para a raiz do repositório:
+- `index.html`
+- a pasta `assets/` inteira
+
+Não envie somente o `index.html`.

@@ -485,7 +485,7 @@ body:before{
     <section class="hero">
       <article class="papiro-card">
         <h1>Entre no templo e atravesse o Nilo.</h1>
-        <p>Escolha um dos três montes. As cartas são sorteadas aleatoriamente e cada tipo usa exatamente a arte original: Perguntas, Pragas do Egito e Cartas do Faraó.</p>
+        <p>Escolha um dos três montes. As cartas são sorteadas aleatoriamente e cada tipo usa as próprias imagens originais que você enviou: Perguntas, Pragas do Egito e Cartas do Faraó.</p>
       </article>
       <aside class="panel">
         <h2>Como jogar</h2>
@@ -528,8 +528,8 @@ body:before{
   <div>
     <div class="card">
       <div id="cardInner" class="card-inner">
-        <div id="cardBack" class="face back"></div>
-        <div id="cardFront" class="face front"></div>
+        <img id="cardBack" class="face back" alt="Verso da carta">
+        <img id="cardFront" class="face front" alt="Carta sorteada">
       </div>
     </div>
     <div class="actions">
@@ -580,10 +580,10 @@ function nextCard(deck){
 function renderDecks(){
   $('#decks').innerHTML=Object.entries(DECKS).map(([key,deck])=>`
     <button class="deck" data-deck="${key}" aria-label="Sortear ${deck.label}">
-      <div class="stack" style="--deck-cover:url('${deck.back}')">
-        <div class="stack-card"></div>
-        <div class="stack-card"></div>
-        <div class="stack-card"></div>
+      <div class="stack">
+        <img class="stack-card" src="${deck.back}" alt="">
+        <img class="stack-card" src="${deck.back}" alt="">
+        <img class="stack-card" src="${deck.back}" alt="${deck.label}">
       </div>
       <div class="deck-title">${deck.label}</div>
     </button>
@@ -594,8 +594,8 @@ function renderDecks(){
 function drawCard(deck){
   lastDeck=deck;
   const front=nextCard(deck);
-  $('#cardBack').style.backgroundImage=`url('${DECKS[deck].back}')`;
-  $('#cardFront').style.backgroundImage=`url('${front}')`;
+  $('#cardBack').src=DECKS[deck].back;
+  $('#cardFront').src=front;
 
   const inner=$('#cardInner');
   inner.classList.remove('animate');
