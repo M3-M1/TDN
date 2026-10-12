@@ -84,10 +84,8 @@ function iniciarTempestade(){
   x:Math.random()*w,y:Math.random()*h,r:.45+Math.random()*.45,
   atraso:Math.random()*.65,fase:Math.random()*Math.PI*2
  }));
- const ornamentos=[...inicio.querySelectorAll(".ornamento")].map(elemento=>{
-  const rect=elemento.getBoundingClientRect();
-  return {elemento,x:Math.max(0,Math.min(w,(rect.left+rect.right)/2)),recolhido:false};
- });
+ // Both corners begin the same slow reverse arc as the smoke starts.
+ inicio.querySelectorAll(".ornamento").forEach(elemento=>elemento.classList.add("recolhendo"));
  let inicioTempo;
  function frame(tempo){
   if(inicioTempo===undefined)inicioTempo=tempo;
@@ -121,8 +119,6 @@ function iniciarTempestade(){
    ctx.beginPath();ctx.arc(x,y,p.r,0,Math.PI*2);ctx.fill();
   }
   ctx.globalAlpha=1;
-  const frente=-w*.16+t/1.55*w*1.3;
-  for(const o of ornamentos){if(!o.recolhido&&frente>=o.x){o.elemento.classList.add("recolhendo");o.recolhido=true;}}
   if(t<2.15)animacaoTempestade=requestAnimationFrame(frame);else ctx.clearRect(0,0,w,h);
  }
  inicio.style.transitionDuration="1.05s";jogo.style.animationDuration="1.05s";
