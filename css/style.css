@@ -3,3 +3,27 @@
 
 /* Preserve the proportions of the original large and square cards. */
 .carta-3d{aspect-ratio:2/3;max-height:65svh}.carta-3d.evento{aspect-ratio:1}.carta-face img{object-fit:contain}.modal-conteudo{perspective:1200px}.ornamento .leque{height:100%;width:125%;bottom:-5%;left:-12%}.ornamento .ramos{height:80%;bottom:18%}.ornamento .ramos-extra{rotate:-20deg;left:20%;bottom:13%;opacity:.9}.jogo{background:linear-gradient(#102b3b77,#102b3b99),url('../assets/imagens/interface/papiro.webp') center/cover fixed}.principal .grao{position:absolute;pointer-events:none;width:3px;height:3px;background:#f7d794;border-radius:50%;left:50%;top:50%;opacity:0}.principal:hover .grao,.principal:focus-visible .grao{animation:grao 1.8s var(--atraso) infinite}@keyframes grao{10%{opacity:1}100%{transform:translate(var(--x),var(--y));opacity:0}}.baralho:nth-child(2){border-top:3px solid #81995b}.baralho:nth-child(3){border-top:3px solid #a64537}@media(prefers-reduced-motion:reduce){.principal .grao{display:none}}
+
+/* Framing: foliage rises above the fan and stays clear of the title. */
+.ornamento{bottom:-3%;height:min(70vh,650px);width:min(32vw,430px)}
+.lado-esquerdo{left:-4%}.lado-direito{right:-4%}
+.ornamento .ramos{height:100%;width:150%;left:-12%;bottom:8%;object-position:bottom;z-index:1}
+.ornamento .ramos-extra{display:none}
+.ornamento .leque{height:63%;width:100%;left:0;bottom:-3%;rotate:-16deg;z-index:2}
+.areia-transicao{filter:none;background:radial-gradient(ellipse at 55% 50%,#cf9b60dd 0%,#ba865099 35%,transparent 67%)}
+.abertura.saindo .areia-transicao{animation:varrer 2s .1s ease-in forwards}
+#tempestade{position:absolute;inset:0;width:100%;height:100%;z-index:21;pointer-events:none}
+.imagem-baralho{cursor:pointer;perspective:1000px;position:relative}
+.imagem-baralho img{transition:transform .4s cubic-bezier(.2,.8,.2,1),filter .4s;transform:rotate(-3deg)}
+.imagem-baralho:hover img,.imagem-baralho:focus-visible img{transform:translateY(-12px) rotate(1deg) rotateY(-9deg);filter:drop-shadow(12px 20px 12px #000a)}
+.convite-carta{display:block;color:#e2bc7a;font-size:.8rem;margin-top:18px}
+.modal-conteudo{perspective:1600px}
+.carta-3d{transition:transform 1.05s cubic-bezier(.22,.7,.18,1);transform:rotateY(0) rotateZ(-5deg);will-change:transform}
+.carta-3d.virada{transform:rotateY(180deg) rotateZ(2deg)}
+.carta-3d.revelando{animation:revelar-realista 1.15s cubic-bezier(.2,.65,.15,1) both}
+.carta-face{box-shadow:8px 12px 24px #0009;border:1px solid #cd9d59}
+.carta-face:after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(105deg,transparent 20%,#fff2 48%,transparent 70%);opacity:.25}
+@keyframes revelar-realista{0%{transform:translateY(30px) rotateY(0) rotateZ(-8deg) scale(.92)}35%{transform:translateY(-12px) rotateY(65deg) rotateZ(-3deg) scale(1.03)}65%{transform:translateY(-8px) rotateY(130deg) rotateZ(3deg) scale(1.03)}100%{transform:translateY(0) rotateY(180deg) rotateZ(2deg) scale(1)}}
+@media(max-width:800px){.ornamento{height:50vh;width:40vw;bottom:-2%}.lado-esquerdo{left:-8%}.lado-direito{right:-8%}.ornamento .ramos{bottom:7%;height:100%}.ornamento .leque{height:60%}}
+@media(max-width:500px){.ornamento{height:40vh;width:48vw;bottom:-1%}.lado-esquerdo{left:-12%}.lado-direito{right:-12%}.boas-vindas{margin-top:-8rem}}
+@media(prefers-reduced-motion:reduce){.carta-3d.revelando{animation:none;transform:rotateY(180deg)}#tempestade{display:none}}
