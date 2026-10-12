@@ -125,6 +125,6 @@
 
 /* Smaller question cards on desktop, preserving their portrait proportions. */
 @media(min-width:801px){
- .baralho:first-child .imagem-baralho img{height:205px;max-height:100%}
- .carta-3d:not(.evento){width:min(210px,calc(56svh * 2 / 3));max-height:none;aspect-ratio:2/3}
+ .baralho:first-child .imagem-baralho img{height:170px;max-height:100%}
+ .carta-3d:not(.evento){width:min(180px,calc(48svh * 2 / 3));max-height:none;aspect-ratio:2/3}
 }
