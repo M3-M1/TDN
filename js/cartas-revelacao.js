@@ -65,7 +65,7 @@ const observador=new MutationObserver(()=>{const aberto=[modal,$("#modal-ajuda")
 [modal,$("#modal-ajuda")].forEach(m=>observador.observe(m,{attributes:true,attributeFilter:["class"]}));
 document.addEventListener("keydown",e=>{if(e.key!=="Tab")return;const aberto=[modal,$("#modal-ajuda")].find(m=>!m.classList.contains("oculto"));if(!aberto)return;const focos=[...aberto.querySelectorAll('button,[tabindex="0"]')];const primeiro=focos[0],ultimo=focos.at(-1);if(e.shiftKey&&document.activeElement===primeiro){e.preventDefault();ultimo.focus();}else if(!e.shiftKey&&document.activeElement===ultimo){e.preventDefault();primeiro.focus();}});
 
-// A finite canvas animation keeps individual grains crisp without a blurred overlay.
+// Transparent, staggered smoke wisps and a handful of directly drawn round dots.
 const tela=$("#tempestade"),ctx=tela.getContext("2d");
 let animacaoTempestade=0;
 function iniciarTempestade(){
@@ -73,37 +73,59 @@ function iniciarTempestade(){
  cancelAnimationFrame(animacaoTempestade);
  const w=innerWidth,h=innerHeight,dpr=Math.min(devicePixelRatio||1,2);
  tela.width=w*dpr;tela.height=h*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);
- const particulas=Array.from({length:Math.min(11000,Math.max(4500,Math.floor(w*h/110)))},()=>({x:Math.random(),y:Math.random()*h,r:.5+Math.random()*3.2,v:.7+Math.random()*.8,t:Math.random()*6.28}));
- const ornamentos=[...inicio.querySelectorAll(".ornamento")].map(elemento=>({elemento,limite:Math.min(w,Math.max(0,elemento.getBoundingClientRect().right)),recolhido:false}));
- const nuvens=Array.from({length:10},(_,i)=>({x:(i%5)/4,y:i<5?.2:.8,raio:.4+Math.random()*.18,fase:Math.random()*6.28}));
+ tela.style.opacity="1";tela.style.background="transparent";
+ ctx.globalCompositeOperation="source-over";
+ const suavizar=x=>{x=Math.max(0,Math.min(1,x));return x*x*(3-2*x);};
+ const fios=Array.from({length:9},(_,i)=>({
+  y:(i+.5)/9*h,atraso:Math.random()*.35,fase:Math.random()*Math.PI*2,
+  raio:Math.min(w,h)*(.06+Math.random()*.055),velocidade:.85+Math.random()*.25
+ }));
+ const pontos=Array.from({length:24},()=>({
+  x:Math.random()*w,y:Math.random()*h,r:.45+Math.random()*.45,
+  atraso:Math.random()*.65,fase:Math.random()*Math.PI*2
+ }));
+ const ornamentos=[...inicio.querySelectorAll(".ornamento")].map(elemento=>{
+  const rect=elemento.getBoundingClientRect();
+  return {elemento,x:Math.max(0,Math.min(w,(rect.left+rect.right)/2)),recolhido:false};
+ });
  let inicioTempo;
  function frame(tempo){
   if(inicioTempo===undefined)inicioTempo=tempo;
-  const t=(tempo-inicioTempo)/1000,frente=t*w*4,cauda=frente-w*1.85;
+  const t=(tempo-inicioTempo)/1000;
   ctx.clearRect(0,0,w,h);
-  // A feathered cloud builds up, then dissolves while the two screens blend.
-  const suavizar=x=>{x=Math.max(0,Math.min(1,x));return x*x*(3-2*x);};
-  const densidade=suavizar(t/.1)*(1-suavizar((t-.38)/.42));
-  // Overlapping broad clouds fill the viewport instead of a rectangular stripe.
-  ctx.globalAlpha=densidade;
-  for(const nuvem of nuvens){
-   const x=nuvem.x*w+Math.sin(t*4+nuvem.fase)*w*.04;
-   const y=nuvem.y*h+Math.cos(t*3+nuvem.fase)*h*.04;
-   const raio=Math.max(w,h)*nuvem.raio;
-   const gradiente=ctx.createRadialGradient(x,y,0,x,y,raio);
-   gradiente.addColorStop(0,"#cfa977d9");gradiente.addColorStop(.45,"#d6b38199");gradiente.addColorStop(1,"#d6b38100");
-   ctx.fillStyle=gradiente;ctx.fillRect(0,0,w,h);
+  for(const fio of fios){
+   const idade=t-fio.atraso;
+   if(idade<0)continue;
+   const envelope=suavizar(idade/.45)*(1-suavizar((idade-1.15)/.65));
+   const frente=-w*.16+idade/1.55*w*1.3*fio.velocidade;
+   // Small overlapping puffs follow curving trails instead of filling a solid band.
+   for(let i=0;i<10;i++){
+    const x=frente-i*fio.raio*.85;
+    const y=fio.y+Math.sin(x/w*7+t*1.8+fio.fase)*h*.055;
+    const raio=fio.raio*(.8+i*.07);
+    ctx.save();ctx.translate(x,y);ctx.scale(1.65,.72);
+    const gradiente=ctx.createRadialGradient(0,0,0,0,0,raio);
+    gradiente.addColorStop(0,"rgba(227,224,217,.075)");
+    gradiente.addColorStop(.4,"rgba(227,224,217,.035)");
+    gradiente.addColorStop(1,"rgba(227,224,217,0)");
+    ctx.globalAlpha=envelope*(1-i/13);
+    ctx.fillStyle=gradiente;ctx.beginPath();ctx.arc(0,0,raio,0,Math.PI*2);ctx.fill();ctx.restore();
+   }
   }
-  for(const p of particulas){
-   const x=(p.x*w+t*120*p.v+Math.sin(t*17*p.v+p.t)*22+w)%w;
-   const y=(p.y+Math.sin(t*13+p.t)*30+h)%h;
-   ctx.fillStyle=p.r>2?"#80512e":p.r>1?"#e2b878":"#f5d6a0";
-   ctx.globalAlpha=densidade*(.25+Math.sin(p.t)*.15);ctx.fillRect(x,y,p.r*(1+p.v),p.r);
+  for(const p of pontos){
+   const idade=t-p.atraso;
+   if(idade<0)continue;
+   const alpha=.38*suavizar(idade/.3)*(1-suavizar((idade-.85)/.5));
+   const x=p.x+idade*w*.12,y=p.y+Math.sin(idade*2+p.fase)*8;
+   ctx.globalAlpha=alpha;ctx.fillStyle="#ded9cd";
+   ctx.beginPath();ctx.arc(x,y,p.r,0,Math.PI*2);ctx.fill();
   }
   ctx.globalAlpha=1;
-  for(const o of ornamentos){if(!o.recolhido&&frente>=o.limite+w*.2){o.elemento.classList.add("recolhendo");o.recolhido=true;}}
-  if(t<.8)animacaoTempestade=requestAnimationFrame(frame);else ctx.clearRect(0,0,w,h);
+  const frente=-w*.16+t/1.55*w*1.3;
+  for(const o of ornamentos){if(!o.recolhido&&frente>=o.x){o.elemento.classList.add("recolhendo");o.recolhido=true;}}
+  if(t<2.15)animacaoTempestade=requestAnimationFrame(frame);else ctx.clearRect(0,0,w,h);
  }
+ inicio.style.transitionDuration="1.05s";jogo.style.animationDuration="1.05s";
  animacaoTempestade=requestAnimationFrame(frame);
 }
 $("#iniciar").addEventListener("click",()=>{
@@ -112,8 +134,8 @@ $("#iniciar").addEventListener("click",()=>{
  const reduzido=matchMedia("(prefers-reduced-motion: reduce)").matches;
  if(!reduzido){inicio.classList.add("tempestade-ativa");iniciarTempestade();}
  if(reduzido){setTimeout(()=>{inicio.classList.add("oculto");jogo.classList.remove("oculto");window.scrollTo(0,0);$("#abrir-ajuda").focus();},50);}else{
-  setTimeout(()=>{jogo.classList.remove("oculto");jogo.classList.add("entrando");inicio.classList.add("troca-suave");window.scrollTo(0,0);},220);
-  setTimeout(()=>{inicio.classList.add("oculto");jogo.classList.remove("entrando");$("#abrir-ajuda").focus();},650);
+  setTimeout(()=>{jogo.classList.remove("oculto");jogo.classList.add("entrando");inicio.classList.add("troca-suave");window.scrollTo(0,0);},650);
+  setTimeout(()=>{inicio.classList.add("oculto");jogo.classList.remove("entrando");$("#abrir-ajuda").focus();},1950);
  }
 });
 $("#voltar-inicio").addEventListener("click",e=>{e.preventDefault();jogo.classList.add("oculto");inicio.classList.remove("oculto","saindo","tempestade-ativa","troca-suave");inicio.querySelectorAll(".ornamento").forEach(o=>o.classList.remove("recolhendo"));window.scrollTo(0,0);});
