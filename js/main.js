@@ -1,5 +1,7 @@
 (() => {
 "use strict";
+// Remove the retired rules block even if an earlier HTML document was cached.
+document.querySelectorAll(".guia").forEach(secao=>secao.remove());
 const $ = (s) => document.querySelector(s);
 const pasta = "assets/imagens/cartas/";
 const dados = {perguntas:{quantidade:48,nome:"Carta de Perguntas"},farao:{quantidade:8,nome:"Carta do Faraó"},pragas:{quantidade:8,nome:"Praga do Egito"}};
