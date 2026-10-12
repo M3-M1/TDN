@@ -104,3 +104,9 @@
 .abertura.tempestade-ativa .areia-transicao{animation:none;opacity:0}
 #tempestade{position:fixed;inset:0;z-index:45;width:100vw;height:100dvh;pointer-events:none}
 @media(prefers-reduced-motion:reduce){.abertura.saindo .ornamento img{opacity:0;animation:none}}
+
+.abertura.saindo{position:fixed;inset:0;z-index:40;opacity:1;transition:opacity .7s ease-in-out}
+.abertura.saindo.troca-suave{opacity:0;pointer-events:none}
+.jogo.entrando{animation:menu-esmaecer .75s ease-in-out both}
+@keyframes menu-esmaecer{from{opacity:0}to{opacity:1}}
+@media(prefers-reduced-motion:reduce){.abertura.saindo{transition:none}.jogo.entrando{animation:none}}

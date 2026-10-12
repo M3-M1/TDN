@@ -78,19 +78,25 @@ function iniciarTempestade(){
  let inicioTempo;
  function frame(tempo){
   if(inicioTempo===undefined)inicioTempo=tempo;
-  const t=(tempo-inicioTempo)/1000,frente=t*w*2.4,cauda=frente-w*1.85;
+  const t=(tempo-inicioTempo)/1000,frente=t*w*2,cauda=frente-w*1.85;
   ctx.clearRect(0,0,w,h);
-  // The opaque sand bank covers each ornament before its reverse arc starts.
-  ctx.globalAlpha=1;ctx.fillStyle="#bf915c";ctx.fillRect(cauda,0,w*1.85,h);
+  // A feathered cloud builds up, then dissolves while the two screens blend.
+  const suavizar=x=>{x=Math.max(0,Math.min(1,x));return x*x*(3-2*x);};
+  const densidade=suavizar(t/.25)*(1-suavizar((t-1.05)/.55));
+  const nevoa=ctx.createLinearGradient(cauda,0,frente,0);
+  nevoa.addColorStop(0,"#bf915c00");nevoa.addColorStop(.14,"#bf915cd9");
+  nevoa.addColorStop(.4,"#cfab78ff");nevoa.addColorStop(.8,"#c69e6aff");
+  nevoa.addColorStop(.94,"#d8b68599");nevoa.addColorStop(1,"#dfbd8d00");
+  ctx.globalAlpha=densidade;ctx.fillStyle=nevoa;ctx.fillRect(cauda,0,w*1.85,h);
   for(const p of particulas){
    const x=frente-p.x*w*1.85+Math.sin(t*17*p.v+p.t)*22;
    const y=(p.y+Math.sin(t*13+p.t)*30+h)%h;
    ctx.fillStyle=p.r>2?"#80512e":p.r>1?"#e2b878":"#f5d6a0";
-   ctx.globalAlpha=.5+Math.sin(p.t)*.25;ctx.fillRect(x,y,p.r*(1+p.v),p.r);
+   ctx.globalAlpha=densidade*(.25+Math.sin(p.t)*.15);ctx.fillRect(x,y,p.r*(1+p.v),p.r);
   }
   ctx.globalAlpha=1;
-  for(const o of ornamentos){if(!o.recolhido&&frente>=o.limite+20){o.elemento.classList.add("recolhendo");o.recolhido=true;}}
-  if(t<1.25)animacaoTempestade=requestAnimationFrame(frame);else ctx.clearRect(0,0,w,h);
+  for(const o of ornamentos){if(!o.recolhido&&frente>=o.limite+w*.2){o.elemento.classList.add("recolhendo");o.recolhido=true;}}
+  if(t<1.6)animacaoTempestade=requestAnimationFrame(frame);else ctx.clearRect(0,0,w,h);
  }
  animacaoTempestade=requestAnimationFrame(frame);
 }
@@ -99,9 +105,12 @@ $("#iniciar").addEventListener("click",()=>{
  inicio.classList.add("saindo");
  const reduzido=matchMedia("(prefers-reduced-motion: reduce)").matches;
  if(!reduzido){inicio.classList.add("tempestade-ativa");iniciarTempestade();}
- setTimeout(()=>{inicio.classList.add("oculto");jogo.classList.remove("oculto");window.scrollTo(0,0);$("#abrir-ajuda").focus();},matchMedia("(prefers-reduced-motion: reduce)").matches?50:900);
+ if(reduzido){setTimeout(()=>{inicio.classList.add("oculto");jogo.classList.remove("oculto");window.scrollTo(0,0);$("#abrir-ajuda").focus();},50);}else{
+  setTimeout(()=>{jogo.classList.remove("oculto");jogo.classList.add("entrando");inicio.classList.add("troca-suave");window.scrollTo(0,0);},650);
+  setTimeout(()=>{inicio.classList.add("oculto");jogo.classList.remove("entrando");$("#abrir-ajuda").focus();},1400);
+ }
 });
-$("#voltar-inicio").addEventListener("click",e=>{e.preventDefault();jogo.classList.add("oculto");inicio.classList.remove("oculto","saindo","tempestade-ativa");inicio.querySelectorAll(".ornamento").forEach(o=>o.classList.remove("recolhendo"));window.scrollTo(0,0);});
+$("#voltar-inicio").addEventListener("click",e=>{e.preventDefault();jogo.classList.add("oculto");inicio.classList.remove("oculto","saindo","tempestade-ativa","troca-suave");inicio.querySelectorAll(".ornamento").forEach(o=>o.classList.remove("recolhendo"));window.scrollTo(0,0);});
 function modoDado(){let digital=$('input[name="modoDado"]:checked').value==="digital";$("#area-dado").classList.toggle("oculto",!digital);}
 document.querySelectorAll('input[name="modoDado"]').forEach(i=>i.addEventListener("change",modoDado));
 modoDado();
