@@ -4,7 +4,6 @@ const $ = (s) => document.querySelector(s);
 const pasta = "assets/imagens/cartas/";
 const dados = {perguntas:{quantidade:48,nome:"Carta de Perguntas"},farao:{quantidade:8,nome:"Carta do Faraó"},pragas:{quantidade:8,nome:"Praga do Egito"}};
 let cartaAtual=null;
-const gabarito={"01":"D","02":"B","03":"C","04":"D","05":"C","06":"A","07":"D","08":"B","09":"B","10":"D","11":"D","12":"C","13":"C","14":"A","15":"D","16":"B","17":"D","18":"C","19":"D","20":"A","21":"D","22":"C","23":"A","24":"D","25":"C","26":"A","27":"B","28":"D","29":"A","30":"B","31":"C","32":"D","33":"A","34":"B","35":"A","36":"C","37":"B","38":"C","39":"A","40":"C","41":"A","42":"D","43":"A","44":"B","45":"C","46":"A","47":"C","48":"D"};
 const caixasRespostas={"01":{"x":31.058,"y":63.63,"width":38.279,"height":3.432},"02":{"x":28.091,"y":62.97,"width":44.016,"height":3.762},"03":{"x":31.058,"y":61.584,"width":37.784,"height":3.432},"04":{"x":29.179,"y":70.495,"width":41.741,"height":3.432},"05":{"x":29.377,"y":64.032,"width":41.642,"height":3.36},"06":{"x":29.278,"y":67.787,"width":41.642,"height":3.36},"07":{"x":29.08,"y":60.277,"width":41.741,"height":3.36},"08":{"x":29.08,"y":67.787,"width":41.543,"height":3.36},"09":{"x":29.377,"y":55.731,"width":41.642,"height":3.36},"10":{"x":29.278,"y":67.787,"width":41.642,"height":3.36},"11":{"x":29.08,"y":57.51,"width":41.741,"height":3.36},"12":{"x":29.278,"y":66.601,"width":41.642,"height":3.36},"13":{"x":31.157,"y":59.802,"width":38.081,"height":3.432},"14":{"x":31.058,"y":59.802,"width":38.18,"height":3.432},"15":{"x":30.959,"y":59.802,"width":38.18,"height":3.432},"16":{"x":30.861,"y":63.564,"width":38.081,"height":3.498},"17":{"x":31.058,"y":59.684,"width":38.279,"height":3.426},"18":{"x":31.157,"y":53.755,"width":37.982,"height":3.426},"19":{"x":30.861,"y":55.929,"width":38.279,"height":3.426},"20":{"x":30.861,"y":59.684,"width":38.081,"height":3.426},"21":{"x":31.058,"y":51.779,"width":38.279,"height":3.426},"22":{"x":31.058,"y":59.289,"width":38.081,"height":3.426},"23":{"x":30.861,"y":66.798,"width":38.18,"height":3.426},"24":{"x":29.377,"y":70.29,"width":40.158,"height":4.084},"25":{"x":30.564,"y":67.589,"width":39.07,"height":3.426},"26":{"x":30.366,"y":59.684,"width":39.268,"height":3.426},"27":{"x":30.465,"y":55.929,"width":38.971,"height":3.426},"28":{"x":30.267,"y":63.439,"width":39.169,"height":3.426},"29":{"x":30.465,"y":63.366,"width":39.268,"height":3.432},"30":{"x":30.465,"y":60.99,"width":38.971,"height":3.432},"31":{"x":30.465,"y":60.99,"width":38.971,"height":3.432},"32":{"x":30.267,"y":57.228,"width":39.169,"height":3.432},"33":{"x":30.465,"y":54.851,"width":39.268,"height":3.432},"34":{"x":30.465,"y":61.188,"width":38.971,"height":3.432},"35":{"x":30.267,"y":63.564,"width":39.268,"height":3.432},"36":{"x":30.267,"y":62.376,"width":39.07,"height":3.432},"37":{"x":30.663,"y":67.327,"width":38.872,"height":3.432},"38":{"x":30.564,"y":59.802,"width":38.971,"height":3.432},"39":{"x":30.267,"y":52.277,"width":39.268,"height":3.432},"40":{"x":30.267,"y":56.04,"width":39.07,"height":3.432},"41":{"x":30.465,"y":59.881,"width":39.268,"height":3.426},"42":{"x":30.465,"y":63.636,"width":39.07,"height":3.426},"43":{"x":30.267,"y":56.126,"width":39.268,"height":3.426},"44":{"x":30.267,"y":56.126,"width":39.07,"height":3.426},"45":{"x":30.564,"y":60.079,"width":39.07,"height":3.426},"46":{"x":30.366,"y":60.079,"width":39.268,"height":3.426},"47":{"x":30.465,"y":52.569,"width":38.971,"height":3.426},"48":{"x":30.267,"y":60.079,"width":39.169,"height":3.426}};
 const modal=$("#modal-carta"), carta=$("#carta-3d");
 function tirarCarta(tipo){
@@ -14,14 +13,11 @@ function tirarCarta(tipo){
  const mascara=$("#mascara-resposta"),botaoResposta=$("#verificar-resposta");
  const caixa=tipo==="perguntas"?caixasRespostas[String(numero).padStart(2,"0")]:null;
  mascara.classList.toggle("oculto",!caixa);
- const imagemFrente=$("#carta-frente");
+ $("#carta-frente").style.clipPath="none";
  if(caixa){
-  const topo=caixa.y-.4,fundo=caixa.y+caixa.height+8.1;
-  // Exclude the printed answer pixels from the image itself as it is rendered.
-  imagemFrente.style.clipPath=`polygon(evenodd,0% 0%,100% 0%,100% 100%,0% 100%,0% 0%,12% ${topo}%,12% ${fundo}%,88% ${fundo}%,88% ${topo}%,12% ${topo}%)`;
- }else imagemFrente.style.clipPath="none";
- mascara.classList.add("oculto");
- $("#resposta-conferida").classList.add("oculto");$("#resposta-conferida").textContent="";
+  mascara.style.left=caixa.x+"%";mascara.style.top=caixa.y+"%";
+  mascara.style.width=caixa.width+"%";mascara.style.height=caixa.height+"%";
+ }
  botaoResposta.classList.add("oculto");botaoResposta.textContent="Verificar resposta";botaoResposta.setAttribute("aria-expanded","false");
  carta.classList.toggle("evento",tipo!=="perguntas");
  const arquivo=String(numero).padStart(2,"0")+".webp";
@@ -39,15 +35,13 @@ function tirarCarta(tipo){
 }
 function atualizarInstrucao(virada){
  $("#verificar-resposta").classList.toggle("oculto",!virada||cartaAtual.tipo!=="perguntas");
- if(!virada)$("#resposta-conferida").classList.add("oculto");
  carta.setAttribute("aria-label",virada?"Ver o verso da carta":"Revelar a carta");
  $("#instrucoes-carta").textContent=virada?"Toque para ver o verso":"Toque para revelar a carta";
 }
 $("#verificar-resposta").addEventListener("click",()=>{
- const resposta=$("#resposta-conferida"),botao=$("#verificar-resposta");
- const mostrar=resposta.classList.contains("oculto");
- resposta.textContent="Resposta correta: "+gabarito[String(cartaAtual.numero).padStart(2,"0")]+".";
- resposta.classList.toggle("oculto",!mostrar);
+ const mascara=$("#mascara-resposta"),botao=$("#verificar-resposta");
+ const mostrar=!mascara.classList.contains("oculto");
+ mascara.classList.toggle("oculto",mostrar);
  botao.setAttribute("aria-expanded",String(mostrar));botao.textContent=mostrar?"Ocultar resposta":"Verificar resposta";
 });
 function virarCarta(){carta.classList.remove("revelando");atualizarInstrucao(carta.classList.toggle("virada"));}

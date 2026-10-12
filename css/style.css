@@ -94,3 +94,5 @@
 @media(max-width:800px){.barra{grid-template-columns:minmax(0,1fr) auto}.barra-detalhe{display:none}}
 
 .carta-frente{background:linear-gradient(100deg,#e7bd81,#ecd1a0 48%,#e4bd81)}
+
+#mascara-resposta{z-index:3;background:#ead0a2;opacity:1;border:0;box-shadow:none;backface-visibility:hidden}
