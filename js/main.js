@@ -1,5 +1,8 @@
 (() => {
 "use strict";
+// Clean retired help controls from older cached HTML documents too.
+document.querySelectorAll("#modal-ajuda .reservado, .mapa-orientacoes figcaption").forEach(elemento=>elemento.remove());
+document.querySelectorAll(".mapa-orientacoes a").forEach(link=>link.replaceWith(...link.childNodes));
 // Remove the retired rules block even if an earlier HTML document was cached.
 document.querySelectorAll(".guia").forEach(secao=>secao.remove());
 const $ = (s) => document.querySelector(s);
