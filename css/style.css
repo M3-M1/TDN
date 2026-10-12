@@ -96,3 +96,11 @@
 .carta-frente{background:linear-gradient(100deg,#e7bd81,#ecd1a0 48%,#e4bd81)}
 
 #mascara-resposta{z-index:3;background:#ead0a2;opacity:1;border:0;box-shadow:none;backface-visibility:hidden}
+
+/* Ornaments stay open until the opaque sand front covers their own corner. */
+.abertura.saindo .ramos,.abertura.saindo .leque{animation:none;opacity:1;transform:rotate(25deg);translate:none}
+.abertura.saindo .ornamento.recolhendo .ramos{animation:abrir-ramos .38s cubic-bezier(.16,.72,.24,1) reverse both}
+.abertura.saindo .ornamento.recolhendo .leque{animation:abrir-leque .36s .02s cubic-bezier(.16,.72,.24,1) reverse both}
+.abertura.tempestade-ativa .areia-transicao{animation:none;opacity:0}
+#tempestade{position:fixed;inset:0;z-index:45;width:100vw;height:100dvh;pointer-events:none}
+@media(prefers-reduced-motion:reduce){.abertura.saindo .ornamento img{opacity:0;animation:none}}

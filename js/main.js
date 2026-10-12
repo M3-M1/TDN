@@ -73,20 +73,24 @@ function iniciarTempestade(){
  cancelAnimationFrame(animacaoTempestade);
  const w=innerWidth,h=innerHeight,dpr=Math.min(devicePixelRatio||1,2);
  tela.width=w*dpr;tela.height=h*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);
- const particulas=Array.from({length:Math.min(4600,Math.floor(w*h/180))},()=>({x:Math.random(),y:Math.random()*h,r:.6+Math.random()*2.6,v:2+Math.random()*3,t:Math.random()*6.28}));
+ const particulas=Array.from({length:Math.min(11000,Math.max(4500,Math.floor(w*h/110)))},()=>({x:Math.random(),y:Math.random()*h,r:.5+Math.random()*3.2,v:.7+Math.random()*.8,t:Math.random()*6.28}));
+ const ornamentos=[...inicio.querySelectorAll(".ornamento")].map(elemento=>({elemento,limite:Math.min(w,Math.max(0,elemento.getBoundingClientRect().right)),recolhido:false}));
  let inicioTempo;
  function frame(tempo){
   if(inicioTempo===undefined)inicioTempo=tempo;
-  const t=(tempo-inicioTempo)/1000;
+  const t=(tempo-inicioTempo)/1000,frente=t*w*2.4,cauda=frente-w*1.85;
   ctx.clearRect(0,0,w,h);
+  // The opaque sand bank covers each ornament before its reverse arc starts.
+  ctx.globalAlpha=1;ctx.fillStyle="#bf915c";ctx.fillRect(cauda,0,w*1.85,h);
   for(const p of particulas){
-   const frente=t*w*1.45;
-   const x=frente-p.x*w*.95,y=p.y+Math.sin(t*5+p.t)*18;
-   ctx.fillStyle=p.r>2?"#9d693d":"#f3cc8b";ctx.globalAlpha=Math.min(1,t*2)*.85;
-   ctx.fillRect(x,y,p.r*(1+t*2),p.r);
+   const x=frente-p.x*w*1.85+Math.sin(t*17*p.v+p.t)*22;
+   const y=(p.y+Math.sin(t*13+p.t)*30+h)%h;
+   ctx.fillStyle=p.r>2?"#80512e":p.r>1?"#e2b878":"#f5d6a0";
+   ctx.globalAlpha=.5+Math.sin(p.t)*.25;ctx.fillRect(x,y,p.r*(1+p.v),p.r);
   }
   ctx.globalAlpha=1;
-  if(t<1.95)animacaoTempestade=requestAnimationFrame(frame);else ctx.clearRect(0,0,w,h);
+  for(const o of ornamentos){if(!o.recolhido&&frente>=o.limite+20){o.elemento.classList.add("recolhendo");o.recolhido=true;}}
+  if(t<1.25)animacaoTempestade=requestAnimationFrame(frame);else ctx.clearRect(0,0,w,h);
  }
  animacaoTempestade=requestAnimationFrame(frame);
 }
@@ -94,10 +98,10 @@ $("#iniciar").addEventListener("click",()=>{
  if(inicio.classList.contains("saindo"))return;
  inicio.classList.add("saindo");
  const reduzido=matchMedia("(prefers-reduced-motion: reduce)").matches;
- if(!reduzido)setTimeout(()=>{inicio.classList.add("tempestade-ativa");iniciarTempestade();},1800);
- setTimeout(()=>{inicio.classList.add("oculto");jogo.classList.remove("oculto");window.scrollTo(0,0);$("#abrir-ajuda").focus();},matchMedia("(prefers-reduced-motion: reduce)").matches?50:3800);
+ if(!reduzido){inicio.classList.add("tempestade-ativa");iniciarTempestade();}
+ setTimeout(()=>{inicio.classList.add("oculto");jogo.classList.remove("oculto");window.scrollTo(0,0);$("#abrir-ajuda").focus();},matchMedia("(prefers-reduced-motion: reduce)").matches?50:900);
 });
-$("#voltar-inicio").addEventListener("click",e=>{e.preventDefault();jogo.classList.add("oculto");inicio.classList.remove("oculto","saindo","tempestade-ativa");window.scrollTo(0,0);});
+$("#voltar-inicio").addEventListener("click",e=>{e.preventDefault();jogo.classList.add("oculto");inicio.classList.remove("oculto","saindo","tempestade-ativa");inicio.querySelectorAll(".ornamento").forEach(o=>o.classList.remove("recolhendo"));window.scrollTo(0,0);});
 function modoDado(){let digital=$('input[name="modoDado"]:checked').value==="digital";$("#area-dado").classList.toggle("oculto",!digital);}
 document.querySelectorAll('input[name="modoDado"]').forEach(i=>i.addEventListener("change",modoDado));
 modoDado();
