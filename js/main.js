@@ -65,7 +65,7 @@ const observador=new MutationObserver(()=>{const aberto=[modal,$("#modal-ajuda")
 [modal,$("#modal-ajuda")].forEach(m=>observador.observe(m,{attributes:true,attributeFilter:["class"]}));
 document.addEventListener("keydown",e=>{if(e.key!=="Tab")return;const aberto=[modal,$("#modal-ajuda")].find(m=>!m.classList.contains("oculto"));if(!aberto)return;const focos=[...aberto.querySelectorAll('button,[tabindex="0"]')];const primeiro=focos[0],ultimo=focos.at(-1);if(e.shiftKey&&document.activeElement===primeiro){e.preventDefault();ultimo.focus();}else if(!e.shiftKey&&document.activeElement===ultimo){e.preventDefault();primeiro.focus();}});
 
-// A finite canvas animation keeps individual grains crisp without a blurred overlay.
+// Soft translucent circles sweep left to right on a clear canvas.
 const tela=$("#tempestade"),ctx=tela.getContext("2d");
 let animacaoTempestade=0;
 function iniciarTempestade(){
@@ -73,37 +73,39 @@ function iniciarTempestade(){
  cancelAnimationFrame(animacaoTempestade);
  const w=innerWidth,h=innerHeight,dpr=Math.min(devicePixelRatio||1,2);
  tela.width=w*dpr;tela.height=h*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);
- const particulas=Array.from({length:Math.min(11000,Math.max(4500,Math.floor(w*h/110)))},()=>({x:Math.random(),y:Math.random()*h,r:.5+Math.random()*3.2,v:.7+Math.random()*.8,t:Math.random()*6.28}));
- const ornamentos=[...inicio.querySelectorAll(".ornamento")].map(elemento=>({elemento,limite:Math.min(w,Math.max(0,elemento.getBoundingClientRect().right)),recolhido:false}));
- const nuvens=Array.from({length:10},(_,i)=>({x:(i%5)/4,y:i<5?.2:.8,raio:.4+Math.random()*.18,fase:Math.random()*6.28}));
+ const bolinhas=Array.from({length:85},(_,i)=>({
+  x:(i%17)/16*w,y:Math.random()*h,r:18+Math.random()*Math.min(w,h)*.09,
+  atraso:(i%17)/16*.30+Math.random()*.035,fase:Math.random()*Math.PI*2
+ }));
+ const ornamentos=[...inicio.querySelectorAll(".ornamento")].map(elemento=>{
+  const rect=elemento.getBoundingClientRect();
+  return {elemento,atraso:Math.max(0,Math.min(1,(rect.left+rect.right)/2/w))*.30+.07,recolhido:false};
+ });
+ const suavizar=x=>{x=Math.max(0,Math.min(1,x));return x*x*(3-2*x);};
  let inicioTempo;
  function frame(tempo){
   if(inicioTempo===undefined)inicioTempo=tempo;
-  const t=(tempo-inicioTempo)/1000,frente=t*w*4,cauda=frente-w*1.85;
+  const t=(tempo-inicioTempo)/1000;
   ctx.clearRect(0,0,w,h);
-  // A feathered cloud builds up, then dissolves while the two screens blend.
-  const suavizar=x=>{x=Math.max(0,Math.min(1,x));return x*x*(3-2*x);};
-  const densidade=suavizar(t/.1)*(1-suavizar((t-.38)/.42));
-  // Overlapping broad clouds fill the viewport instead of a rectangular stripe.
-  ctx.globalAlpha=densidade;
-  for(const nuvem of nuvens){
-   const x=nuvem.x*w+Math.sin(t*4+nuvem.fase)*w*.04;
-   const y=nuvem.y*h+Math.cos(t*3+nuvem.fase)*h*.04;
-   const raio=Math.max(w,h)*nuvem.raio;
-   const gradiente=ctx.createRadialGradient(x,y,0,x,y,raio);
-   gradiente.addColorStop(0,"#cfa977d9");gradiente.addColorStop(.45,"#d6b38199");gradiente.addColorStop(1,"#d6b38100");
-   ctx.fillStyle=gradiente;ctx.fillRect(0,0,w,h);
-  }
-  for(const p of particulas){
-   const x=(p.x*w+t*120*p.v+Math.sin(t*17*p.v+p.t)*22+w)%w;
-   const y=(p.y+Math.sin(t*13+p.t)*30+h)%h;
-   ctx.fillStyle=p.r>2?"#80512e":p.r>1?"#e2b878":"#f5d6a0";
-   ctx.globalAlpha=densidade*(.25+Math.sin(p.t)*.15);ctx.fillRect(x,y,p.r*(1+p.v),p.r);
-  }
+  // Draw the entire effect into one layer, capped at 20% opacity even at overlaps.
   ctx.globalAlpha=1;
-  for(const o of ornamentos){if(!o.recolhido&&frente>=o.limite+w*.2){o.elemento.classList.add("recolhendo");o.recolhido=true;}}
+  for(const b of bolinhas){
+   const idade=t-b.atraso;
+   if(idade<0||idade>.46)continue;
+   const intensidade=suavizar(idade/.08)*(1-suavizar((idade-.18)/.28));
+   const x=b.x+idade*w*.13,y=b.y+Math.sin(idade*5+b.fase)*12;
+   const raio=b.r*(.8+idade*.7);
+   const gradiente=ctx.createRadialGradient(x,y,0,x,y,raio);
+   gradiente.addColorStop(0,`rgba(245,247,250,${intensidade})`);
+   gradiente.addColorStop(.55,`rgba(245,247,250,${intensidade*.65})`);
+   gradiente.addColorStop(1,"rgba(245,247,250,0)");
+   ctx.fillStyle=gradiente;ctx.beginPath();ctx.arc(x,y,raio,0,Math.PI*2);ctx.fill();
+  }
+  for(const o of ornamentos){if(!o.recolhido&&t>=o.atraso){o.elemento.classList.add("recolhendo");o.recolhido=true;}}
   if(t<.8)animacaoTempestade=requestAnimationFrame(frame);else ctx.clearRect(0,0,w,h);
  }
+ tela.style.opacity="0.2";
+ tela.style.background="transparent";
  animacaoTempestade=requestAnimationFrame(frame);
 }
 $("#iniciar").addEventListener("click",()=>{
