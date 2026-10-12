@@ -33,22 +33,22 @@
 .abertura .lado-esquerdo{left:-9%;transform:none;transform-origin:50% 96%}
 .abertura .lado-direito{right:-9%;transform:scaleX(-1);transform-origin:center}
 .abertura .ornamento img{object-fit:contain;height:auto;object-position:center;translate:none;rotate:none;opacity:0;transform-origin:50% 96%;filter:drop-shadow(0 8px 12px #0007);will-change:transform,opacity}
-.abertura .ornamento .ramos{width:100%;left:0;bottom:0;z-index:1;transform:rotate(-12deg)}
-.abertura .ornamento .leque{width:68%;left:16%;bottom:-1%;z-index:2;transform:rotate(-12deg)}
+.abertura .ornamento .ramos{width:100%;left:0;bottom:0;z-index:1;transform:rotate(25deg)}
+.abertura .ornamento .leque{width:68%;left:16%;bottom:-1%;z-index:2;transform:rotate(25deg)}
 .abertura.ornamentos-prontos .ramos{animation:abrir-ramos 1.65s cubic-bezier(.16,.72,.24,1) both}
 .abertura.ornamentos-prontos .leque{animation:abrir-leque 1.55s .15s cubic-bezier(.16,.72,.24,1) both}
 .abertura.saindo .ornamento{animation:none}
 .abertura.saindo .ramos{animation:recolher-ramos 1.05s cubic-bezier(.55,.06,.65,.4) both}
 .abertura.saindo .leque{animation:recolher-leque 1s .08s cubic-bezier(.55,.06,.65,.4) both}
-@keyframes abrir-ramos{0%{opacity:0;transform:translateY(25%) rotate(65deg) scaleX(.12)}20%{opacity:1}70%{transform:translateY(0) rotate(-17deg) scaleX(1.03)}100%{opacity:1;transform:translateY(0) rotate(-12deg) scaleX(1)}}
-@keyframes abrir-leque{0%{opacity:0;transform:translateY(25%) rotate(72deg) scaleX(.1)}20%{opacity:1}75%{transform:translateY(0) rotate(-16deg) scaleX(1.02)}100%{opacity:1;transform:translateY(0) rotate(-12deg) scaleX(1)}}
-@keyframes recolher-ramos{0%{opacity:1;transform:rotate(-12deg) scaleX(1)}45%{opacity:1;transform:translateY(-12%) rotate(22deg) scaleX(.72)}100%{opacity:0;transform:translateY(-80%) rotate(82deg) scaleX(.08)}}
-@keyframes recolher-leque{0%{opacity:1;transform:rotate(-12deg) scaleX(1)}45%{opacity:1;transform:translateY(-10%) rotate(27deg) scaleX(.65)}100%{opacity:0;transform:translateY(-85%) rotate(90deg) scaleX(.08)}}
+@keyframes abrir-ramos{0%{opacity:0;transform:translateY(25%) rotate(65deg) scaleX(.12)}20%{opacity:1}70%{transform:translateY(0) rotate(21deg) scaleX(1.03)}100%{opacity:1;transform:translateY(0) rotate(25deg) scaleX(1)}}
+@keyframes abrir-leque{0%{opacity:0;transform:translateY(25%) rotate(72deg) scaleX(.1)}20%{opacity:1}75%{transform:translateY(0) rotate(22deg) scaleX(1.02)}100%{opacity:1;transform:translateY(0) rotate(25deg) scaleX(1)}}
+@keyframes recolher-ramos{0%{opacity:1;transform:rotate(25deg) scaleX(1)}45%{opacity:1;transform:translateY(-12%) rotate(22deg) scaleX(.72)}100%{opacity:0;transform:translateY(-80%) rotate(82deg) scaleX(.08)}}
+@keyframes recolher-leque{0%{opacity:1;transform:rotate(25deg) scaleX(1)}45%{opacity:1;transform:translateY(-10%) rotate(27deg) scaleX(.65)}100%{opacity:0;transform:translateY(-85%) rotate(90deg) scaleX(.08)}}
 .abertura.saindo .areia-transicao{animation:none;opacity:0}
 .abertura.tempestade-ativa .areia-transicao{animation:varrer 1.95s ease-in-out both}
 @media(max-width:800px){.abertura .ornamento{width:48vw;bottom:1%}.abertura .lado-esquerdo{left:-10%}.abertura .lado-direito{right:-10%}}
 @media(max-width:500px){.abertura .ornamento{width:65vw;bottom:2%}.abertura .lado-esquerdo{left:-18%}.abertura .lado-direito{right:-18%}}
-@media(prefers-reduced-motion:reduce){.abertura.ornamentos-prontos .ornamento img{animation:none;opacity:1;transform:rotate(-12deg)}.abertura.saindo .ornamento img{opacity:0}.abertura.tempestade-ativa .areia-transicao{animation:none;opacity:0}}
+@media(prefers-reduced-motion:reduce){.abertura.ornamentos-prontos .ornamento img{animation:none;opacity:1;transform:rotate(25deg)}.abertura.saindo .ornamento img{opacity:0}.abertura.tempestade-ativa .areia-transicao{animation:none;opacity:0}}
 
 /* Interior typography: book-style headings and clear instructions. */
 .jogo,.ajuda-conteudo,.instrucoes-carta{font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
@@ -64,3 +64,11 @@
 .imagem-baralho img{transform:none;rotate:none}
 .carta-3d{rotate:none;transition:transform .85s cubic-bezier(.25,.65,.2,1)}
 .carta-3d.revelando{animation-duration:.85s}
+
+/* Anchor both radial bases to the viewport corners. */
+.abertura:after{display:none}
+.abertura .ornamento{--largura-canto:clamp(320px,44vw,680px);width:var(--largura-canto);bottom:-5%;}
+.abertura .lado-esquerdo{left:calc(var(--largura-canto) / -2);}
+.abertura .lado-direito{right:calc(var(--largura-canto) / -2);}
+@media(max-width:800px){.abertura .ornamento{--largura-canto:52vw;bottom:-3%;}}
+@media(max-width:500px){.abertura .ornamento{--largura-canto:76vw;bottom:-2%;}}
