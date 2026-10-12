@@ -80,7 +80,7 @@ function iniciarTempestade(){
   y:(i+.5)/15*h,atraso:Math.random()*.35,fase:Math.random()*Math.PI*2,
   raio:Math.min(w,h)*(.095+Math.random()*.07),velocidade:.85+Math.random()*.25
  }));
- const pontos=Array.from({length:24},()=>({
+ const pontos=Array.from({length:250},()=>({
   x:Math.random()*w,y:Math.random()*h,r:.45+Math.random()*.45,
   atraso:Math.random()*.65,fase:Math.random()*Math.PI*2
  }));
