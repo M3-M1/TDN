@@ -82,3 +82,6 @@
 .hieroglifos-topo{position:absolute;top:clamp(18px,4vh,42px);left:50%;transform:translateX(-50%);width:min(72%,880px);display:flex;justify-content:space-between;align-items:center;z-index:2;color:#cfaa6a99;font-size:clamp(1.2rem,2.2vw,2rem);line-height:1;pointer-events:none}
 @media(max-width:500px){.hieroglifos-topo{width:82%;top:24px;font-size:1.4rem}}
 @media(prefers-reduced-motion:reduce){.abertura.saindo .ramos,.abertura.saindo .leque{animation:none;opacity:0}}
+
+#mascara-resposta{border:0;border-radius:0;box-shadow:none;background:linear-gradient(100deg,#e7bd81,#ecd1a0 48%,#e4bd81)}
+.resposta-conferida{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;font-size:1rem;font-weight:600;color:#f7db9d;margin:12px 0 0}
