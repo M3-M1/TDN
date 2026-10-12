@@ -147,25 +147,4 @@ $("#lancar-dado").addEventListener("click",()=>{
  let contador=0;
  const interval=setInterval(()=>{cubo.textContent=String(1+Math.floor(Math.random()*6));contador++;if(contador>=12){clearInterval(interval);const valor=1+Math.floor(Math.random()*6);cubo.textContent=String(valor);cubo.classList.remove("rolando");$("#resultado-dado").textContent=`Resultado: ${valor}`;botao.disabled=false;lancando=false;}},90);
 });
-const casas=[
-["🔵 Casa neutra","Nada acontece. Continue sua jornada."],
-["❓ Casa das perguntas","Retire uma carta de Perguntas. Se acertar, avance 2 casas."],
-["👑 Casa do Faraó","Retire uma carta do Faraó e receba o benefício indicado."],
-["🩸 Casa das Pragas","Retire uma carta de Pragas e cumpra a penalidade."],
-["🏜️ Entrada do Deserto","Siga pelo caminho alternativo através do deserto."],
-["🌪️ Tempestade de areia","Volte 2 casas.","deserto"],
-["☀️ Calor intenso","Volte 4 casas em direção ao Nilo.","deserto"],
-["🐍 Cobras","Volte 1 casa.","deserto"],
-["🦂 Escorpiões","Volte 3 casas.","deserto"],
-["❓ Pergunta no deserto","Use o mesmo baralho de Perguntas. Acertou? Avance 2 casas.","deserto"],
-["🔵 Retorno ao Nilo","Retorne ao caminho principal.","deserto"],
-["🔺 As Três Pirâmides","Fim do percurso! O primeiro jogador a chegar vence.","final"]
-];
-const container=$("#casas");
-for(const [nome,descricao,tipo] of casas){
- const article=document.createElement("article");article.className="casa "+(tipo||"");
- const titulo=document.createElement("strong");titulo.textContent=nome;
- const p=document.createElement("p");p.textContent=descricao;
- article.append(titulo,p);container.append(article);
-}
 })();

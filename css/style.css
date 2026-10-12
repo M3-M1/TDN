@@ -110,3 +110,9 @@
 .abertura.saindo{transition-duration:.35s}.jogo.entrando{animation-duration:.4s}
 
 @media(prefers-reduced-motion:reduce){.abertura.saindo .ornamento.recolhendo{animation:none;translate:0 115%}}
+
+/* Original illustrated rules belong in the help dialog. */
+.ajuda-conteudo{width:min(100%,1100px)}
+.mapa-orientacoes{margin:24px 0}
+.mapa-orientacoes img{display:block;width:100%;height:auto;border-radius:8px}
+.mapa-orientacoes figcaption{text-align:center;font: .85rem system-ui,sans-serif;margin-top:10px;color:#ddc7a0}
