@@ -41,6 +41,7 @@ document.querySelectorAll("[data-fechar-ajuda]").forEach(b=>b.addEventListener("
 $("#abrir-ajuda").addEventListener("click",()=>{ultimoFoco=document.activeElement;$("#modal-ajuda").classList.remove("oculto");document.body.style.overflow="hidden";});
 document.addEventListener("keydown",e=>{if(e.key==="Escape"){fechar(modal);fechar($("#modal-ajuda"));}});
 const inicio=$("#abertura"),jogo=$("#jogo");
+Promise.all([...inicio.querySelectorAll(".ornamento img")].map(imagem=>imagem.decode().catch(()=>{}))).then(()=>inicio.classList.add("ornamentos-prontos"));
 for(let i=0;i<24;i++){const grao=document.createElement("span");grao.className="grao";grao.setAttribute("aria-hidden","true");grao.style.setProperty("--x",`${Math.cos(i)*170}px`);grao.style.setProperty("--y",`${Math.sin(i)*80}px`);grao.style.setProperty("--atraso",`${i/24*1.8}s`);$("#iniciar").append(grao);}
 let ultimoFoco=null;
 const observador=new MutationObserver(()=>{const aberto=[modal,$("#modal-ajuda")].find(m=>!m.classList.contains("oculto"));if(aberto){if(!ultimoFoco)ultimoFoco=document.activeElement;$("#jogo").inert=true;(aberto===modal?carta:aberto.querySelector("button")).focus();}else{$("#jogo").inert=false;if(ultimoFoco){ultimoFoco.focus();ultimoFoco=null;}}});
@@ -55,29 +56,31 @@ function iniciarTempestade(){
  cancelAnimationFrame(animacaoTempestade);
  const w=innerWidth,h=innerHeight,dpr=Math.min(devicePixelRatio||1,2);
  tela.width=w*dpr;tela.height=h*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);
- const particulas=Array.from({length:Math.min(4600,Math.floor(w*h/180))},()=>({x:Math.random()*w*1.6-w*1.4,y:Math.random()*h,r:.6+Math.random()*2.6,v:2+Math.random()*3,t:Math.random()*6.28}));
+ const particulas=Array.from({length:Math.min(4600,Math.floor(w*h/180))},()=>({x:Math.random(),y:Math.random()*h,r:.6+Math.random()*2.6,v:2+Math.random()*3,t:Math.random()*6.28}));
  let inicioTempo;
  function frame(tempo){
   if(inicioTempo===undefined)inicioTempo=tempo;
   const t=(tempo-inicioTempo)/1000;
   ctx.clearRect(0,0,w,h);
   for(const p of particulas){
-   const x=p.x+t*w*p.v*.5,y=p.y+Math.sin(t*5+p.t)*18;
+   const frente=t*w*1.45;
+   const x=frente-p.x*w*.95,y=p.y+Math.sin(t*5+p.t)*18;
    ctx.fillStyle=p.r>2?"#9d693d":"#f3cc8b";ctx.globalAlpha=Math.min(1,t*2)*.85;
    ctx.fillRect(x,y,p.r*(1+t*2),p.r);
   }
   ctx.globalAlpha=1;
-  if(t<2.1)animacaoTempestade=requestAnimationFrame(frame);else ctx.clearRect(0,0,w,h);
+  if(t<1.95)animacaoTempestade=requestAnimationFrame(frame);else ctx.clearRect(0,0,w,h);
  }
  animacaoTempestade=requestAnimationFrame(frame);
 }
 $("#iniciar").addEventListener("click",()=>{
  if(inicio.classList.contains("saindo"))return;
  inicio.classList.add("saindo");
- iniciarTempestade();
- setTimeout(()=>{inicio.classList.add("oculto");jogo.classList.remove("oculto");window.scrollTo(0,0);$("#abrir-ajuda").focus();},matchMedia("(prefers-reduced-motion: reduce)").matches?50:2100);
+ const reduzido=matchMedia("(prefers-reduced-motion: reduce)").matches;
+ if(!reduzido)setTimeout(()=>{inicio.classList.add("tempestade-ativa");iniciarTempestade();},1120);
+ setTimeout(()=>{inicio.classList.add("oculto");jogo.classList.remove("oculto");window.scrollTo(0,0);$("#abrir-ajuda").focus();},matchMedia("(prefers-reduced-motion: reduce)").matches?50:3120);
 });
-$("#voltar-inicio").addEventListener("click",e=>{e.preventDefault();jogo.classList.add("oculto");inicio.classList.remove("oculto","saindo");window.scrollTo(0,0);});
+$("#voltar-inicio").addEventListener("click",e=>{e.preventDefault();jogo.classList.add("oculto");inicio.classList.remove("oculto","saindo","tempestade-ativa");window.scrollTo(0,0);});
 function modoDado(){let digital=$('input[name="modoDado"]:checked').value==="digital";$("#area-dado").classList.toggle("oculto",!digital);}
 document.querySelectorAll('input[name="modoDado"]').forEach(i=>i.addEventListener("change",modoDado));
 modoDado();
