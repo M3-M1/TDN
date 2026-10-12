@@ -13,12 +13,13 @@ function tirarCarta(tipo){
  const mascara=$("#mascara-resposta"),botaoResposta=$("#verificar-resposta");
  const caixa=tipo==="perguntas"?caixasRespostas[String(numero).padStart(2,"0")]:null;
  mascara.classList.toggle("oculto",!caixa);
+ mascara.style.display=caixa?"block":"none";
  $("#carta-frente").style.clipPath="none";
  if(caixa){
   mascara.style.left=caixa.x+"%";mascara.style.top=caixa.y+"%";
   mascara.style.width=caixa.width+"%";mascara.style.height=caixa.height+"%";
  }
- botaoResposta.classList.add("oculto");botaoResposta.textContent="Verificar resposta";botaoResposta.setAttribute("aria-expanded","false");
+ botaoResposta.disabled=false;botaoResposta.classList.add("oculto");botaoResposta.textContent="Verificar resposta";botaoResposta.setAttribute("aria-expanded","false");
  carta.classList.toggle("evento",tipo!=="perguntas");
  const arquivo=String(numero).padStart(2,"0")+".webp";
  $("#carta-verso").src=`${pasta}${tipo}/verso.png`;
@@ -40,9 +41,8 @@ function atualizarInstrucao(virada){
 }
 $("#verificar-resposta").addEventListener("click",()=>{
  const mascara=$("#mascara-resposta"),botao=$("#verificar-resposta");
- const mostrar=!mascara.classList.contains("oculto");
- mascara.classList.toggle("oculto",mostrar);
- botao.setAttribute("aria-expanded",String(mostrar));botao.textContent=mostrar?"Ocultar resposta":"Verificar resposta";
+ mascara.classList.add("oculto");mascara.style.display="none";
+ botao.setAttribute("aria-expanded","true");botao.disabled=true;
 });
 function virarCarta(){carta.classList.remove("revelando");atualizarInstrucao(carta.classList.toggle("virada"));}
 function fechar(mod){mod.classList.add("oculto");if($("#modal-carta").classList.contains("oculto")&&$("#modal-ajuda").classList.contains("oculto")) document.body.style.overflow="";}
