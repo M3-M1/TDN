@@ -14,7 +14,13 @@ function tirarCarta(tipo){
  const mascara=$("#mascara-resposta"),botaoResposta=$("#verificar-resposta");
  const caixa=tipo==="perguntas"?caixasRespostas[String(numero).padStart(2,"0")]:null;
  mascara.classList.toggle("oculto",!caixa);
- if(caixa){mascara.style.left="12%";mascara.style.top=(caixa.y-.4)+"%";mascara.style.width="76%";mascara.style.height=(caixa.height+8.5)+"%";}
+ const imagemFrente=$("#carta-frente");
+ if(caixa){
+  const topo=caixa.y-.4,fundo=caixa.y+caixa.height+8.1;
+  // Exclude the printed answer pixels from the image itself as it is rendered.
+  imagemFrente.style.clipPath=`polygon(evenodd,0% 0%,100% 0%,100% 100%,0% 100%,0% 0%,12% ${topo}%,12% ${fundo}%,88% ${fundo}%,88% ${topo}%,12% ${topo}%)`;
+ }else imagemFrente.style.clipPath="none";
+ mascara.classList.add("oculto");
  $("#resposta-conferida").classList.add("oculto");$("#resposta-conferida").textContent="";
  botaoResposta.classList.add("oculto");botaoResposta.textContent="Verificar resposta";botaoResposta.setAttribute("aria-expanded","false");
  carta.classList.toggle("evento",tipo!=="perguntas");
