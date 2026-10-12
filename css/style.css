@@ -119,3 +119,6 @@
 
 /* The illustrated map in Orientações replaces the entire retired rules section. */
 .guia{display:none!important}
+
+#modal-ajuda .reservado,.mapa-orientacoes figcaption{display:none!important}
+.mapa-orientacoes a{pointer-events:none;cursor:default}
