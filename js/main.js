@@ -1,5 +1,17 @@
 (() => {
 "use strict";
+// Set the question deck size directly, including older cached page markup.
+const blocoPerguntas=document.querySelector('[data-baralho="perguntas"]');
+if(blocoPerguntas){
+ blocoPerguntas.style.setProperty("height","170px","important");
+ const imagemPerguntas=blocoPerguntas.querySelector("img");
+ if(imagemPerguntas){
+  imagemPerguntas.style.setProperty("height","170px","important");
+  imagemPerguntas.style.setProperty("max-height","170px","important");
+  imagemPerguntas.style.setProperty("width","auto","important");
+  imagemPerguntas.style.setProperty("object-fit","contain","important");
+ }
+}
 // Clean retired help controls from older cached HTML documents too.
 document.querySelectorAll("#modal-ajuda .reservado, .mapa-orientacoes figcaption").forEach(elemento=>elemento.remove());
 document.querySelectorAll(".mapa-orientacoes a").forEach(link=>link.replaceWith(...link.childNodes));
