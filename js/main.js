@@ -65,7 +65,7 @@ const observador=new MutationObserver(()=>{const aberto=[modal,$("#modal-ajuda")
 [modal,$("#modal-ajuda")].forEach(m=>observador.observe(m,{attributes:true,attributeFilter:["class"]}));
 document.addEventListener("keydown",e=>{if(e.key!=="Tab")return;const aberto=[modal,$("#modal-ajuda")].find(m=>!m.classList.contains("oculto"));if(!aberto)return;const focos=[...aberto.querySelectorAll('button,[tabindex="0"]')];const primeiro=focos[0],ultimo=focos.at(-1);if(e.shiftKey&&document.activeElement===primeiro){e.preventDefault();ultimo.focus();}else if(!e.shiftKey&&document.activeElement===ultimo){e.preventDefault();primeiro.focus();}});
 
-// Soft drifting mist dominates; a few separate round grains suggest sand.
+// Transparent, staggered smoke wisps and a handful of directly drawn round dots.
 const tela=$("#tempestade"),ctx=tela.getContext("2d");
 let animacaoTempestade=0;
 function iniciarTempestade(){
@@ -76,26 +76,14 @@ function iniciarTempestade(){
  tela.style.opacity="1";tela.style.background="transparent";
  ctx.globalCompositeOperation="source-over";
  const suavizar=x=>{x=Math.max(0,Math.min(1,x));return x*x*(3-2*x);};
- const normal=()=>Math.sqrt(-2*Math.log(Math.max(Math.random(),.00001)))*Math.cos(Math.random()*Math.PI*2);
- const grupos=Array.from({length:16},()=>({x:(Math.random()-.5)*w*.65,y:Math.random()*h,largura:35+Math.random()*w*.08,altura:25+Math.random()*h*.11}));
- const nuvens=Array.from({length:24},()=>({x:(Math.random()-.5)*w*.85,y:Math.random()*h,r:Math.min(w,h)*(.14+Math.random()*.18),fase:Math.random()*Math.PI*2}));
- const graos=Array.from({length:Math.min(180,Math.max(70,Math.floor(w*h/10000)))},(_,i)=>{
-  const grupo=grupos[i%grupos.length];
-  return {x:grupo.x+normal()*grupo.largura,y:grupo.y+normal()*grupo.altura,
-   r:.65+Math.random()*1.25,alpha:.22+Math.random()*.25,
-   fase:Math.random()*Math.PI*2,velocidade:.9+Math.random()*.2,cor:i%3};
- });
- // The sprite corners are fully transparent; the visible grain is circular.
- const cores=["222,211,192","245,239,225","182,173,158"];
- const sprites=cores.map(cor=>{
-  const sprite=document.createElement("canvas");sprite.width=sprite.height=24;
-  const pincel=sprite.getContext("2d"),gradiente=pincel.createRadialGradient(12,12,0,12,12,11);
-  gradiente.addColorStop(0,`rgba(${cor},1)`);
-  gradiente.addColorStop(.65,`rgba(${cor},.8)`);
-  gradiente.addColorStop(1,`rgba(${cor},0)`);
-  pincel.fillStyle=gradiente;pincel.beginPath();pincel.arc(12,12,11,0,Math.PI*2);pincel.fill();
-  return sprite;
- });
+ const fios=Array.from({length:9},(_,i)=>({
+  y:(i+.5)/9*h,atraso:Math.random()*.35,fase:Math.random()*Math.PI*2,
+  raio:Math.min(w,h)*(.06+Math.random()*.055),velocidade:.85+Math.random()*.25
+ }));
+ const pontos=Array.from({length:24},()=>({
+  x:Math.random()*w,y:Math.random()*h,r:.45+Math.random()*.45,
+  atraso:Math.random()*.65,fase:Math.random()*Math.PI*2
+ }));
  const ornamentos=[...inicio.querySelectorAll(".ornamento")].map(elemento=>{
   const rect=elemento.getBoundingClientRect();
   return {elemento,x:Math.max(0,Math.min(w,(rect.left+rect.right)/2)),recolhido:false};
@@ -103,34 +91,41 @@ function iniciarTempestade(){
  let inicioTempo;
  function frame(tempo){
   if(inicioTempo===undefined)inicioTempo=tempo;
-  const t=(tempo-inicioTempo)/1000,progresso=Math.min(t/.9,1);
-  const frente=-w*.45+suavizar(progresso)*w*1.9;
-  const intensidade=suavizar(t/.14)*(1-suavizar((t-.66)/.29));
+  const t=(tempo-inicioTempo)/1000;
   ctx.clearRect(0,0,w,h);
-  // Only feathered cloud shapes are painted; everything outside them stays clear.
-  for(const nuvem of nuvens){
-   const x=frente+nuvem.x+Math.sin(t*3+nuvem.fase)*24;
-   const y=nuvem.y+Math.cos(t*3+nuvem.fase)*18;
-   const raio=nuvem.r*(.95+t*.12);
-   const gradiente=ctx.createRadialGradient(x,y,0,x,y,raio);
-   gradiente.addColorStop(0,"rgba(225,220,210,.17)");
-   gradiente.addColorStop(.4,"rgba(225,220,210,.10)");
-   gradiente.addColorStop(1,"rgba(225,220,210,0)");
-   ctx.globalAlpha=intensidade;ctx.fillStyle=gradiente;
-   ctx.beginPath();ctx.arc(x,y,raio,0,Math.PI*2);ctx.fill();
+  for(const fio of fios){
+   const idade=t-fio.atraso;
+   if(idade<0)continue;
+   const envelope=suavizar(idade/.45)*(1-suavizar((idade-1.15)/.65));
+   const frente=-w*.16+idade/1.55*w*1.3*fio.velocidade;
+   // Small overlapping puffs follow curving trails instead of filling a solid band.
+   for(let i=0;i<10;i++){
+    const x=frente-i*fio.raio*.85;
+    const y=fio.y+Math.sin(x/w*7+t*1.8+fio.fase)*h*.055;
+    const raio=fio.raio*(.8+i*.07);
+    ctx.save();ctx.translate(x,y);ctx.scale(1.65,.72);
+    const gradiente=ctx.createRadialGradient(0,0,0,0,0,raio);
+    gradiente.addColorStop(0,"rgba(227,224,217,.075)");
+    gradiente.addColorStop(.4,"rgba(227,224,217,.035)");
+    gradiente.addColorStop(1,"rgba(227,224,217,0)");
+    ctx.globalAlpha=envelope*(1-i/13);
+    ctx.fillStyle=gradiente;ctx.beginPath();ctx.arc(0,0,raio,0,Math.PI*2);ctx.fill();ctx.restore();
+   }
   }
-  for(const g of graos){
-   const x=frente+g.x+Math.sin(t*8+g.fase)*18;
-   const y=g.y+Math.sin(t*10*g.velocidade+g.fase)*20;
-   if(x<-5||x>w+5||y<-5||y>h+5)continue;
-   ctx.globalAlpha=g.alpha*intensidade;
-   ctx.drawImage(sprites[g.cor],x-g.r,y-g.r,g.r*2,g.r*2);
+  for(const p of pontos){
+   const idade=t-p.atraso;
+   if(idade<0)continue;
+   const alpha=.38*suavizar(idade/.3)*(1-suavizar((idade-.85)/.5));
+   const x=p.x+idade*w*.12,y=p.y+Math.sin(idade*2+p.fase)*8;
+   ctx.globalAlpha=alpha;ctx.fillStyle="#ded9cd";
+   ctx.beginPath();ctx.arc(x,y,p.r,0,Math.PI*2);ctx.fill();
   }
   ctx.globalAlpha=1;
+  const frente=-w*.16+t/1.55*w*1.3;
   for(const o of ornamentos){if(!o.recolhido&&frente>=o.x){o.elemento.classList.add("recolhendo");o.recolhido=true;}}
-  if(t<.95)animacaoTempestade=requestAnimationFrame(frame);else ctx.clearRect(0,0,w,h);
+  if(t<2.15)animacaoTempestade=requestAnimationFrame(frame);else ctx.clearRect(0,0,w,h);
  }
- inicio.style.transitionDuration=".5s";jogo.style.animationDuration=".5s";
+ inicio.style.transitionDuration="1.05s";jogo.style.animationDuration="1.05s";
  animacaoTempestade=requestAnimationFrame(frame);
 }
 $("#iniciar").addEventListener("click",()=>{
@@ -139,8 +134,8 @@ $("#iniciar").addEventListener("click",()=>{
  const reduzido=matchMedia("(prefers-reduced-motion: reduce)").matches;
  if(!reduzido){inicio.classList.add("tempestade-ativa");iniciarTempestade();}
  if(reduzido){setTimeout(()=>{inicio.classList.add("oculto");jogo.classList.remove("oculto");window.scrollTo(0,0);$("#abrir-ajuda").focus();},50);}else{
-  setTimeout(()=>{jogo.classList.remove("oculto");jogo.classList.add("entrando");inicio.classList.add("troca-suave");window.scrollTo(0,0);},350);
-  setTimeout(()=>{inicio.classList.add("oculto");jogo.classList.remove("entrando");$("#abrir-ajuda").focus();},950);
+  setTimeout(()=>{jogo.classList.remove("oculto");jogo.classList.add("entrando");inicio.classList.add("troca-suave");window.scrollTo(0,0);},650);
+  setTimeout(()=>{inicio.classList.add("oculto");jogo.classList.remove("entrando");$("#abrir-ajuda").focus();},1950);
  }
 });
 $("#voltar-inicio").addEventListener("click",e=>{e.preventDefault();jogo.classList.add("oculto");inicio.classList.remove("oculto","saindo","tempestade-ativa","troca-suave");inicio.querySelectorAll(".ornamento").forEach(o=>o.classList.remove("recolhendo"));window.scrollTo(0,0);});
