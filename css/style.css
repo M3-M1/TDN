@@ -85,3 +85,10 @@
 
 #mascara-resposta{border:0;border-radius:0;box-shadow:none;background:linear-gradient(100deg,#e7bd81,#ecd1a0 48%,#e4bd81)}
 .resposta-conferida{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;font-size:1rem;font-weight:600;color:#f7db9d;margin:12px 0 0}
+
+/* Equal side columns keep the header message centered in the viewport. */
+.barra{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center}
+.barra .marca{justify-self:start}
+.barra-detalhe{justify-self:center;text-align:center}
+.barra #abrir-ajuda{justify-self:end}
+@media(max-width:800px){.barra{grid-template-columns:minmax(0,1fr) auto}.barra-detalhe{display:none}}
