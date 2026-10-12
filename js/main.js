@@ -76,9 +76,9 @@ function iniciarTempestade(){
  tela.style.opacity="1";tela.style.background="transparent";
  ctx.globalCompositeOperation="source-over";
  const suavizar=x=>{x=Math.max(0,Math.min(1,x));return x*x*(3-2*x);};
- const fios=Array.from({length:9},(_,i)=>({
-  y:(i+.5)/9*h,atraso:Math.random()*.35,fase:Math.random()*Math.PI*2,
-  raio:Math.min(w,h)*(.06+Math.random()*.055),velocidade:.85+Math.random()*.25
+ const fios=Array.from({length:15},(_,i)=>({
+  y:(i+.5)/15*h,atraso:Math.random()*.35,fase:Math.random()*Math.PI*2,
+  raio:Math.min(w,h)*(.095+Math.random()*.07),velocidade:.85+Math.random()*.25
  }));
  const pontos=Array.from({length:24},()=>({
   x:Math.random()*w,y:Math.random()*h,r:.45+Math.random()*.45,
@@ -99,16 +99,16 @@ function iniciarTempestade(){
    const envelope=suavizar(idade/.45)*(1-suavizar((idade-1.15)/.65));
    const frente=-w*.16+idade/1.55*w*1.3*fio.velocidade;
    // Small overlapping puffs follow curving trails instead of filling a solid band.
-   for(let i=0;i<10;i++){
+   for(let i=0;i<12;i++){
     const x=frente-i*fio.raio*.85;
     const y=fio.y+Math.sin(x/w*7+t*1.8+fio.fase)*h*.055;
     const raio=fio.raio*(.8+i*.07);
     ctx.save();ctx.translate(x,y);ctx.scale(1.65,.72);
     const gradiente=ctx.createRadialGradient(0,0,0,0,0,raio);
-    gradiente.addColorStop(0,"rgba(227,224,217,.075)");
-    gradiente.addColorStop(.4,"rgba(227,224,217,.035)");
+    gradiente.addColorStop(0,"rgba(227,224,217,.13)");
+    gradiente.addColorStop(.4,"rgba(227,224,217,.065)");
     gradiente.addColorStop(1,"rgba(227,224,217,0)");
-    ctx.globalAlpha=envelope*(1-i/13);
+    ctx.globalAlpha=envelope*(1-i/16);
     ctx.fillStyle=gradiente;ctx.beginPath();ctx.arc(0,0,raio,0,Math.PI*2);ctx.fill();ctx.restore();
    }
   }
