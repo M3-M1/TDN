@@ -129,3 +129,6 @@
  .baralhos .baralho:first-child .imagem-baralho img{height:100%;width:auto;max-width:100%;object-fit:contain}
  #modal-carta .carta-3d:not(.evento){width:min(180px,calc(48svh * 2 / 3));max-height:none;aspect-ratio:2/3}
 }
+
+/* Bound the question preview independently of intrinsic image dimensions. */
+[data-baralho="perguntas"]{height:170px!important;min-height:170px!important;max-height:170px!important;overflow:hidden;display:flex!important;align-items:center;justify-content:center}[data-baralho="perguntas"] img{display:block!important;height:170px!important;max-height:170px!important;width:auto!important;max-width:100%!important;object-fit:contain!important;flex:0 0 auto}.baralho{overflow:hidden}
