@@ -65,7 +65,7 @@ const observador=new MutationObserver(()=>{const aberto=[modal,$("#modal-ajuda")
 [modal,$("#modal-ajuda")].forEach(m=>observador.observe(m,{attributes:true,attributeFilter:["class"]}));
 document.addEventListener("keydown",e=>{if(e.key!=="Tab")return;const aberto=[modal,$("#modal-ajuda")].find(m=>!m.classList.contains("oculto"));if(!aberto)return;const focos=[...aberto.querySelectorAll('button,[tabindex="0"]')];const primeiro=focos[0],ultimo=focos.at(-1);if(e.shiftKey&&document.activeElement===primeiro){e.preventDefault();ultimo.focus();}else if(!e.shiftKey&&document.activeElement===ultimo){e.preventDefault();primeiro.focus();}});
 
-// Individual round grains on a transparent canvas; overlapping grains build density.
+// Soft drifting mist dominates; a few separate round grains suggest sand.
 const tela=$("#tempestade"),ctx=tela.getContext("2d");
 let animacaoTempestade=0;
 function iniciarTempestade(){
@@ -78,10 +78,11 @@ function iniciarTempestade(){
  const suavizar=x=>{x=Math.max(0,Math.min(1,x));return x*x*(3-2*x);};
  const normal=()=>Math.sqrt(-2*Math.log(Math.max(Math.random(),.00001)))*Math.cos(Math.random()*Math.PI*2);
  const grupos=Array.from({length:16},()=>({x:(Math.random()-.5)*w*.65,y:Math.random()*h,largura:35+Math.random()*w*.08,altura:25+Math.random()*h*.11}));
- const graos=Array.from({length:Math.min(24000,Math.max(10000,Math.floor(w*h/65)))},(_,i)=>{
+ const nuvens=Array.from({length:24},()=>({x:(Math.random()-.5)*w*.85,y:Math.random()*h,r:Math.min(w,h)*(.14+Math.random()*.18),fase:Math.random()*Math.PI*2}));
+ const graos=Array.from({length:Math.min(180,Math.max(70,Math.floor(w*h/10000)))},(_,i)=>{
   const grupo=grupos[i%grupos.length];
   return {x:grupo.x+normal()*grupo.largura,y:grupo.y+normal()*grupo.altura,
-   r:.45+Math.random()*1.65,alpha:.14+Math.random()*.12,
+   r:.65+Math.random()*1.25,alpha:.22+Math.random()*.25,
    fase:Math.random()*Math.PI*2,velocidade:.9+Math.random()*.2,cor:i%3};
  });
  // The sprite corners are fully transparent; the visible grain is circular.
@@ -106,6 +107,18 @@ function iniciarTempestade(){
   const frente=-w*.45+suavizar(progresso)*w*1.9;
   const intensidade=suavizar(t/.14)*(1-suavizar((t-.66)/.29));
   ctx.clearRect(0,0,w,h);
+  // Only feathered cloud shapes are painted; everything outside them stays clear.
+  for(const nuvem of nuvens){
+   const x=frente+nuvem.x+Math.sin(t*3+nuvem.fase)*24;
+   const y=nuvem.y+Math.cos(t*3+nuvem.fase)*18;
+   const raio=nuvem.r*(.95+t*.12);
+   const gradiente=ctx.createRadialGradient(x,y,0,x,y,raio);
+   gradiente.addColorStop(0,"rgba(225,220,210,.17)");
+   gradiente.addColorStop(.4,"rgba(225,220,210,.10)");
+   gradiente.addColorStop(1,"rgba(225,220,210,0)");
+   ctx.globalAlpha=intensidade;ctx.fillStyle=gradiente;
+   ctx.beginPath();ctx.arc(x,y,raio,0,Math.PI*2);ctx.fill();
+  }
   for(const g of graos){
    const x=frente+g.x+Math.sin(t*8+g.fase)*18;
    const y=g.y+Math.sin(t*10*g.velocidade+g.fase)*20;
