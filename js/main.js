@@ -75,28 +75,34 @@ function iniciarTempestade(){
  tela.width=w*dpr;tela.height=h*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);
  const particulas=Array.from({length:Math.min(11000,Math.max(4500,Math.floor(w*h/110)))},()=>({x:Math.random(),y:Math.random()*h,r:.5+Math.random()*3.2,v:.7+Math.random()*.8,t:Math.random()*6.28}));
  const ornamentos=[...inicio.querySelectorAll(".ornamento")].map(elemento=>({elemento,limite:Math.min(w,Math.max(0,elemento.getBoundingClientRect().right)),recolhido:false}));
+ const nuvens=Array.from({length:10},(_,i)=>({x:(i%5)/4,y:i<5?.2:.8,raio:.4+Math.random()*.18,fase:Math.random()*6.28}));
  let inicioTempo;
  function frame(tempo){
   if(inicioTempo===undefined)inicioTempo=tempo;
-  const t=(tempo-inicioTempo)/1000,frente=t*w*2,cauda=frente-w*1.85;
+  const t=(tempo-inicioTempo)/1000,frente=t*w*4,cauda=frente-w*1.85;
   ctx.clearRect(0,0,w,h);
   // A feathered cloud builds up, then dissolves while the two screens blend.
   const suavizar=x=>{x=Math.max(0,Math.min(1,x));return x*x*(3-2*x);};
-  const densidade=suavizar(t/.25)*(1-suavizar((t-1.05)/.55));
-  const nevoa=ctx.createLinearGradient(cauda,0,frente,0);
-  nevoa.addColorStop(0,"#bf915c00");nevoa.addColorStop(.14,"#bf915cd9");
-  nevoa.addColorStop(.4,"#cfab78ff");nevoa.addColorStop(.8,"#c69e6aff");
-  nevoa.addColorStop(.94,"#d8b68599");nevoa.addColorStop(1,"#dfbd8d00");
-  ctx.globalAlpha=densidade;ctx.fillStyle=nevoa;ctx.fillRect(cauda,0,w*1.85,h);
+  const densidade=suavizar(t/.1)*(1-suavizar((t-.38)/.42));
+  // Overlapping broad clouds fill the viewport instead of a rectangular stripe.
+  ctx.globalAlpha=densidade;
+  for(const nuvem of nuvens){
+   const x=nuvem.x*w+Math.sin(t*4+nuvem.fase)*w*.04;
+   const y=nuvem.y*h+Math.cos(t*3+nuvem.fase)*h*.04;
+   const raio=Math.max(w,h)*nuvem.raio;
+   const gradiente=ctx.createRadialGradient(x,y,0,x,y,raio);
+   gradiente.addColorStop(0,"#cfa977d9");gradiente.addColorStop(.45,"#d6b38199");gradiente.addColorStop(1,"#d6b38100");
+   ctx.fillStyle=gradiente;ctx.fillRect(0,0,w,h);
+  }
   for(const p of particulas){
-   const x=frente-p.x*w*1.85+Math.sin(t*17*p.v+p.t)*22;
+   const x=(p.x*w+t*120*p.v+Math.sin(t*17*p.v+p.t)*22+w)%w;
    const y=(p.y+Math.sin(t*13+p.t)*30+h)%h;
    ctx.fillStyle=p.r>2?"#80512e":p.r>1?"#e2b878":"#f5d6a0";
    ctx.globalAlpha=densidade*(.25+Math.sin(p.t)*.15);ctx.fillRect(x,y,p.r*(1+p.v),p.r);
   }
   ctx.globalAlpha=1;
   for(const o of ornamentos){if(!o.recolhido&&frente>=o.limite+w*.2){o.elemento.classList.add("recolhendo");o.recolhido=true;}}
-  if(t<1.6)animacaoTempestade=requestAnimationFrame(frame);else ctx.clearRect(0,0,w,h);
+  if(t<.8)animacaoTempestade=requestAnimationFrame(frame);else ctx.clearRect(0,0,w,h);
  }
  animacaoTempestade=requestAnimationFrame(frame);
 }
@@ -106,8 +112,8 @@ $("#iniciar").addEventListener("click",()=>{
  const reduzido=matchMedia("(prefers-reduced-motion: reduce)").matches;
  if(!reduzido){inicio.classList.add("tempestade-ativa");iniciarTempestade();}
  if(reduzido){setTimeout(()=>{inicio.classList.add("oculto");jogo.classList.remove("oculto");window.scrollTo(0,0);$("#abrir-ajuda").focus();},50);}else{
-  setTimeout(()=>{jogo.classList.remove("oculto");jogo.classList.add("entrando");inicio.classList.add("troca-suave");window.scrollTo(0,0);},650);
-  setTimeout(()=>{inicio.classList.add("oculto");jogo.classList.remove("entrando");$("#abrir-ajuda").focus();},1400);
+  setTimeout(()=>{jogo.classList.remove("oculto");jogo.classList.add("entrando");inicio.classList.add("troca-suave");window.scrollTo(0,0);},220);
+  setTimeout(()=>{inicio.classList.add("oculto");jogo.classList.remove("entrando");$("#abrir-ajuda").focus();},650);
  }
 });
 $("#voltar-inicio").addEventListener("click",e=>{e.preventDefault();jogo.classList.add("oculto");inicio.classList.remove("oculto","saindo","tempestade-ativa","troca-suave");inicio.querySelectorAll(".ornamento").forEach(o=>o.classList.remove("recolhendo"));window.scrollTo(0,0);});

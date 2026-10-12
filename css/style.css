@@ -110,3 +110,5 @@
 .jogo.entrando{animation:menu-esmaecer .75s ease-in-out both}
 @keyframes menu-esmaecer{from{opacity:0}to{opacity:1}}
 @media(prefers-reduced-motion:reduce){.abertura.saindo{transition:none}.jogo.entrando{animation:none}}
+
+.abertura.saindo{transition-duration:.35s}.jogo.entrando{animation-duration:.4s}
