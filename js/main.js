@@ -41,7 +41,7 @@ function atualizarInstrucao(virada){
  $("#verificar-resposta").classList.toggle("oculto",!virada||cartaAtual.tipo!=="perguntas");
  if(!virada)$("#resposta-conferida").classList.add("oculto");
  carta.setAttribute("aria-label",virada?"Ver o verso da carta":"Revelar a carta");
- $("#instrucoes-carta").textContent=virada?(cartaAtual.tipo==="perguntas"?"Responda à pergunta e use o botão para conferir. Acertou? Avance 2 casas.":"Siga a instrução da carta. Toque para ver o verso."):"Toque para revelar a carta.";
+ $("#instrucoes-carta").textContent=virada?"Toque para ver o verso":"Toque para revelar a carta";
 }
 $("#verificar-resposta").addEventListener("click",()=>{
  const resposta=$("#resposta-conferida"),botao=$("#verificar-resposta");
